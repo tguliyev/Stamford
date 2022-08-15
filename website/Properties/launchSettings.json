@@ -10,7 +10,9 @@
   "profiles": {
     "Stamford": {
       "commandName": "Project",
-      "applicationUrl": "http://localhost:51348",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:7197;http://localhost:5258",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
