@@ -2,7 +2,11 @@
     ViewData["title"] = "Exam";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Exam results</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form class="d-flex flex-column align-items-center">
+  <div class="form-group w-25 mb-3">
+    <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter the code">
+  </div>
+  <div class="col-md-12 text-center">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
