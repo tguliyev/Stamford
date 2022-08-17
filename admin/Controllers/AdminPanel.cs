@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Stamford.Models;
 
 namespace admin.Controllers
 {
     [Route("[controller]")]
-    public class test : Controller
+    public class AdminPanel : Controller
     {
-        private readonly ILogger<test> _logger;
+        private readonly ILogger<AdminPanel> _logger;
 
-        private readonly StamfordDBContext _context;
-
-        public test(ILogger<test> logger ,StamfordDBContext context)
+        public AdminPanel(ILogger<AdminPanel> logger)
         {
             _logger = logger;
-            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            User user = new User();
+            return View(user);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
