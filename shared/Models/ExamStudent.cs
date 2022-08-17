@@ -9,8 +9,5 @@ namespace Stamford.Models
         public int Studentid { get; set; }
         public int Examid { get; set; }
         public byte Mark { get; set; }
-
-        public virtual Exam Exam { get; set; } = null!;
-        public virtual Student Student { get; set; } = null!;
     }
 }
