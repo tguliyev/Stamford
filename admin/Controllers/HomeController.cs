@@ -1,16 +1,23 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using admin.Models;
+using Stamford.Models;
+using System.Linq;
+
 
 namespace admin.Controllers;
 
 public class HomeController : Controller
 {
+
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly StamfordDBContext _context;
+
+    public HomeController(ILogger<HomeController> logger,StamfordDBContext context)
     {
         _logger = logger;
+        _context = context;
+        
     }
 
     public IActionResult Index()
@@ -21,6 +28,7 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
+    
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
