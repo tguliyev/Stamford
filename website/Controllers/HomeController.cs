@@ -3,18 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using Stamford.Models;
 
 namespace Stamford.Controllers;
-
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly StamfordDBContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, StamfordDBContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     public IActionResult Index()
     {
+        return View();
+    }
+
+    public IActionResult AboutUs() {
+        return View();
+    }
+
+    public IActionResult Contact() {
         return View();
     }
 
