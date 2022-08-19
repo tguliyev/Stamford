@@ -1,8 +1,35 @@
+@using System.Diagnostics
 @{
     ViewData["title"] = "Graduate";
+    StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
+    if (context == null) throw new ArgumentNullException("Context is null");
 }
 
 <div class="text-center">
     <h1 class="display-4">Graduate sertificates</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="row row-cols-1 row-cols-md-3 m-0 g-4">
+    @{
+        foreach (var graduate in context.Graduates.ToList())
+        {
+            Asset certImg = context.Assets.First(asset => asset.Id == graduate.ImageId);
+
+            <div class="col">
+                <div class="card">
+                    <img src="@certImg.Url" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@graduate.FullName</h5>
+                        <p class="card-text">@graduate.Desc</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
+
+
+

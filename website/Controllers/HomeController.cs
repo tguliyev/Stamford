@@ -16,6 +16,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewData["context"] = _context;
         return View();
     }
 

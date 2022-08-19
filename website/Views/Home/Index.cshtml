@@ -1,22 +1,93 @@
-﻿@{
+﻿@using System.Diagnostics
+@{
     ViewData["title"] = "Home Page";
+    StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
+    if (context == null) throw new ArgumentNullException("Context is null");
+    Stopwatch stopwatch = new Stopwatch();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@* Slider *@
+<div class="carousel slide w-100 h-50 mb-4" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item h-50 active">
+            <img src="1.jpg" class="d-block m-auto h-50" alt="...">
+        </div>
+        <div class="carousel-item h-50">
+            <img src="2.jpg" class="d-block m-auto h-50" alt="...">
+        </div>
+        <div class="carousel-item h-50">
+            <img src="3.jpg" class="d-block m-auto h-50" alt="...">
+        </div>
+    </div>
 </div>
 
-<div id="carouselExampleSlidesOnly" class="carousel slide h-50" data-bs-ride="carousel">
-  <div class="carousel-inner h-50">
-    <div class="carousel-item active h-50">
-      <img src="1.jpg" height="300px" class="d-block w-100 h-50" alt="...">
-    </div>
-    <div class="carousel-item h-50">
-      <img src="2.jpg" class="d-block w-100 h-50" alt="...">
-    </div>
-    <div class="carousel-item h-50">
-      <img src="3.jpg" class="d-block w-100 h-50" alt="...">
-    </div>
-  </div>
+@* Posts *@
+<div class="row row-cols-1 row-cols-md-4 m-0 g-4">
+    @{
+        stopwatch.Start();
+        foreach (var post in context.Posts.ToList())
+        {
+
+            List<Asset> assets = (from a in context.Assets
+                                  join ap in context.PostAssets on a.Id equals ap.Imageid
+                                  where ap.Postid == post.Id
+                                  select a).AsParallel().ToList();
+
+            <div class="col">
+                <div class="card h-100">
+
+                    <div id="post@(post.Id)" data-bs-interval="false" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+
+                            <div class="carousel-item">
+                                <video src="video.mp4" class="d-block w-100" controls></video>
+                            </div>
+
+                            @{
+                                foreach (var asset in assets)
+                                {
+                                    <div class="carousel-item @(asset.Id == 1 ? "active" : "" )">
+
+                                        @{
+                                            if (System.IO.Path.GetExtension(asset.Url) == "mp4")
+                                            {
+                                                <video src="@asset.Url" class="d-block w-100" controls></video>
+                                            }
+                                            else
+                                            {
+                                                <img src="@asset.Url" class="d-block w-100" alt="...">
+                                            }
+                                        }
+
+                                    </div>
+                                }
+                            }
+
+                        </div>
+
+                        @{
+                            if (assets.Count > 1)
+                            {
+                                <button class="carousel-control-prev" type="button" data-bs-target="#post@(post.Id)" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#post@(post.Id)" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            }
+                        }
+
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@post.Content</p>
+                    </div>
+                </div>
+            </div>
+        }
+        stopwatch.Stop();
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
+    }
 </div>

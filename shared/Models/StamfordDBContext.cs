@@ -17,6 +17,7 @@ namespace Stamford.Models
         }
 
         public virtual DbSet<Admin> Admins { get; set; } = null!;
+        public virtual DbSet<Graduate> Graduates { get; set; } = null!;
         public virtual DbSet<Asset> Assets { get; set; } = null!;
         public virtual DbSet<Exam> Exams { get; set; } = null!;
         public virtual DbSet<ExamStudent> ExamStudents { get; set; } = null!;
@@ -119,6 +120,16 @@ namespace Stamford.Models
                 entity.ToTable("PostAsset");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.Image)
+                    .WithMany(p => p.PostAssets)
+                    .HasForeignKey(d => d.Imageid)
+                    .HasConstraintName("FK__PostAsset__Image__123EB7A3");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.PostAssets)
+                    .HasForeignKey(d => d.Postid)
+                    .HasConstraintName("FK__PostAsset__Posti__114A936A");
             });
 
             modelBuilder.Entity<Schedule>(entity =>
