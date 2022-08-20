@@ -27,10 +27,14 @@ public class LoginController : Controller
     [HttpPost]
     public IActionResult Panel(User user)
     {
-        
-        if (user.Email == "tamerlaailn7@gmail.com" && user.Password == "123456")return View();
+        var hashpassword = Hash.CreateMD5Hash(user.Password);
+
+        var admin = _context.Admins.Where(a=>a.Password == hashpassword && a.Email == user.Email).ToList();
+        System.Console.WriteLine(admin.Count);
+
+        if (admin.Count==1)return View(admin[0]);
         else return RedirectToAction("Index", "Login");
-  
+
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
