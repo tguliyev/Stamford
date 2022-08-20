@@ -1,1 +1,7 @@
-<h1>Okay</h1>
+
+@{
+    Admin? admin = ViewData["Admin"] as Admin;
+    if(admin == null )throw new ArgumentNullException();
+}
+
+<h1>@admin.Username</h1>

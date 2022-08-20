@@ -30,9 +30,10 @@ public class LoginController : Controller
         var hashpassword = Hash.CreateMD5Hash(user.Password);
 
         var admin = _context.Admins.Where(a=>a.Password == hashpassword && a.Email == user.Email).ToList();
-        System.Console.WriteLine(admin.Count);
-
-        if (admin.Count==1)return View(admin[0]);
+        if (admin.Count==1){
+            ViewData["Admin"] = admin[0];
+            return View();
+            }
         else return RedirectToAction("Index", "Login");
 
     }
