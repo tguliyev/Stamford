@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Stamford.Models;
 
-public class GraduateController : Controller {
+public class GraduateController : Controller
+{
 
     private StamfordDBContext _context;
 
@@ -10,7 +11,8 @@ public class GraduateController : Controller {
         _context = context;
     }
 
-    public IActionResult Index() {
+    public IActionResult Index()
+    {
         ViewData["context"] = _context;
         return View();
     }
