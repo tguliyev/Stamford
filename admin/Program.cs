@@ -6,7 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton(typeof(StamfordDBContext));
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options=>{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 var app = builder.Build();
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
