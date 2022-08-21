@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -19,10 +20,11 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var tupple = (new PostViewModel(), new AssetViewModel());
+            return View(tupple);
         }
         [HttpPost]
-        public IActionResult AddPost(){
+        public IActionResult AddPost([Bind(Prefix = "Item1")] PostViewModel post, [Bind(Prefix = "Item2")] AssetViewModel asset){
             return View();
         }
 

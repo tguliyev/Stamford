@@ -1,3 +1,4 @@
+@model (PostViewModel post,AssetViewModel asset)
 @{
     Layout = "_Layout";
 }
@@ -8,21 +9,24 @@
             <form class="forms-sample">
                 <div class="form-group">
                     <label for="exampleInputName1">Başlıq</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Post Başlıq">
+                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Post Başlıq" asp-for="post.Title">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail3">Açıqlama</label>
-                    <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Açıqlama">
+                    <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Açıqlama" asp-for="post.Content" />
                 </div>
                 <div class="form-group">
-                    @* <label>File upload</label>
-                    <input type="file" name="img[]" class="file-upload-default">
+                    <label>File upload</label>
+                    <input type="file" asp-for="asset.Url" class="file-upload-default" />
                     <div class="input-group col-xs-12">
                         <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
-                        <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                        <span class="btn btn-danger btn-file">
+                            Browse <input type="file" asp-for="asset.Url" />
                         </span>
-                    </div> *@
+                    </div>
+
+                    @* <input class="form-control form-control-lg" placeholder="Middle Name"
+                    asp-for="asset.Url" type="file" required /> *@
                     
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
