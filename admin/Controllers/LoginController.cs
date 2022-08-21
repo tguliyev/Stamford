@@ -35,6 +35,8 @@ public class LoginController : Controller
         if (admin.Count==1){
             HttpContext.Session.SetString("username", admin[0].Username);
             HttpContext.Session.SetString("url", url[0]);
+            ViewData["username"] = HttpContext.Session.GetString("username");
+            ViewData["url"] = HttpContext.Session.GetString("url");
             return View();
             }
         else return RedirectToAction("Index", "Login");

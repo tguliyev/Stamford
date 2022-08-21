@@ -8,10 +8,9 @@ builder.Services.AddSingleton(typeof(StamfordDBContext));
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options=>{
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
 var app = builder.Build();
-app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -27,6 +26,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
