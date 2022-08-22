@@ -22,11 +22,20 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult AboutUs() {
+    public IActionResult About() {
         return View();
     }
 
     public IActionResult Contact() {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Contact(string message, string name, string email, string subject) {
+        Console.WriteLine(message);
+        Console.WriteLine(name);
+        Console.WriteLine(email);
+        Console.WriteLine(subject);
         return View();
     }
 
