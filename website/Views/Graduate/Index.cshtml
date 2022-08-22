@@ -1,35 +1,70 @@
-@using System.Diagnostics
 @{
+    const int ROW = 3;
+    const int COL = 4;
     ViewData["title"] = "Graduate";
     StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
     if (context == null) throw new ArgumentNullException("Context is null");
+
+    int pageNum = (int)ViewData["pageNum"];
 }
 
-<div class="text-center">
-    <h1 class="display-4">Graduate sertificates</h1>
-</div>
-
-<div class="row row-cols-1 row-cols-md-3 m-0 g-4">
-    @{
-        foreach (var graduate in context.Graduates.ToList())
-        {
-            Asset certImg = context.Assets.First(asset => asset.Id == graduate.ImageId);
-
-            <div class="col">
-                <div class="card">
-                    <img src="@certImg.Url" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">@graduate.FullName</h5>
-                        <p class="card-text">@graduate.Desc</p>
-                    </div>
+<section class="special_cource padding_top">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5">
+                <div class="section_tittle text-center">
+                    <h2>Our Graduates</h2>
                 </div>
             </div>
+        </div>
+        @{
+            List<Graduate[]> graduates = context.Graduates.Skip(pageNum * ROW * COL).Take(ROW * COL).ToArray().Chunk(COL).ToList();
+            for (int i = 0; i < graduates.Count; i++) {
+                <div class="row mb-5">
+                    @{
+                    for (int j = 0; j < graduates[i].Length; j++) {
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="single_special_cource">
+                                <img src="img/special_cource_1.png" class="special_img" alt="">
+                                <div class="special_cource_text">
+
+                                    <a href="course-details.html">
+                                        <h3 class="mt-0">@graduates[i][j].FullName</h3>
+                                    </a>
+                                    <p>@graduates[i][j].Desc</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                    }
+                </div>
+            }
         }
-    }
-</div>
-
-
-
-
-
-
+        
+        <nav class="blog-pagination justify-content-center d-flex mb-5">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a asp-controller="Home" asp-action="Index" asp-route-pageNum="" class="disabled page-link"
+                        aria-label="Previous">
+                        <i class="ti-angle-left"></i>
+                    </a>
+                </li>
+                @{
+                    @* int count = (posts.Count % 10) > 1 ? (posts.Count / 10) + 1 : posts.Count / 10; *@
+                    @* for (int i = 0; i < count; i++)
+                    {
+                        <li class="page-item @(pageNum == i ? "active" : "")">
+                            <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@i" class="page-link">@(i + 1)</a>
+                        </li>
+                    } *@
+                }
+                <li class="page-item">
+                    <a asp-controller=" Home" asp-action="Index" asp-route-pageNum="" class="page-link" aria-label="Next">
+                        <i class="ti-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>

@@ -11,9 +11,10 @@ public class GraduateController : Controller
         _context = context;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int pageNum)
     {
         ViewData["context"] = _context;
+        ViewData["pageNum"] = pageNum;
         return View();
     }
 }

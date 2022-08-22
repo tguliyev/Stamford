@@ -14,9 +14,11 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public IActionResult Index()
+    [HttpGet]
+    public IActionResult Index(int pageNum = 0)
     {
         ViewData["context"] = _context;
+        ViewData["pageNum"] = pageNum;
         return View();
     }
 

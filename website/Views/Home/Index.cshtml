@@ -1,93 +1,162 @@
-﻿@using System.Diagnostics
-@{
+﻿@{
+    const int POST_NUM = 5;
     ViewData["title"] = "Home Page";
     StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
     if (context == null) throw new ArgumentNullException("Context is null");
-    Stopwatch stopwatch = new Stopwatch();
+
+    int pageNum = (int)ViewData["pageNum"];
 }
 
-@* Slider *@
-<div class="carousel slide w-100 mb-4" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item w-100 active">
-            <img src="11.svg" class="d-block" alt="...">
-        </div>
-        @*<div class="carousel-item w-100">
-            <img src="2.jpg" class="d-block m-auto" alt="...">
-        </div>
-        <div class="carousel-item w-100">
-            <img src="3.jpg" class="d-block m-auto" alt="...">
-        </div>*@
-    </div>
-</div>
-
-@* Posts *@
-<div class="row row-cols-1 row-cols-md-4 m-0 g-4">
-    @{
-        stopwatch.Start();
-        foreach (var post in context.Posts.ToList())
-        {
-
-            List<Asset> assets = (from a in context.Assets
-                                  join ap in context.PostAssets on a.Id equals ap.Imageid
-                                  where ap.Postid == post.Id
-                                  select a).AsParallel().ToList();
-
-            <div class="col">
-                <div class="card h-100">
-
-                    <div id="post@(post.Id)" data-bs-interval="false" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-
-                            <div class="carousel-item">
-                                <video src="video.mp4" class="d-block w-100" controls></video>
-                            </div>
-
-                            @{
-                                foreach (var asset in assets)
-                                {
-                                    <div class="carousel-item @(asset.Id == 1 ? "active" : "" )">
-
-                                        @{
-                                            if (System.IO.Path.GetExtension(asset.Url) == "mp4")
-                                            {
-                                                <video src="@asset.Url" class="d-block w-100" controls></video>
-                                            }
-                                            else
-                                            {
-                                                <img src="@asset.Url" class="d-block w-100" alt="...">
-                                            }
-                                        }
-
-                                    </div>
-                                }
-                            }
-
-                        </div>
-
-                        @{
-                            if (assets.Count > 1)
-                            {
-                                <button class="carousel-control-prev" type="button" data-bs-target="#post@(post.Id)" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#post@(post.Id)" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            }
-                        }
-
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@post.Title</h5>
-                        <p class="card-text">@post.Content</p>
+<!-- banner part start-->
+<section class="banner_part">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-xl-6">
+                <div class="banner_text">
+                    <div class="banner_text_iner">
+                        <h5>Every child yearns to learn</h5>
+                        <h1>Making Your Childs
+                            World Better</h1>
+                        <p>Replenish seasons may male hath fruit beast were seas saw you arrie said man beast whales
+                            his void unto last session for bite. Set have great you'll male grass yielding yielding
+                            man</p>
+                        <a asp-controller="Course" asp-action="Index" class="btn_1">View Course </a>
                     </div>
                 </div>
             </div>
-        }
-        stopwatch.Stop();
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
-    }
-</div>
+        </div>
+    </div>
+</section>
+<!-- banner part start-->
+
+<section class="blog_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mb-5 mb-lg-0">
+                <div class="blog_left_sidebar">
+                    @{
+                        @* Add skip pageNum check if value more than post.Count *@
+                        List<Post> posts = context.Posts.Skip(pageNum * POST_NUM).Take(POST_NUM).ToList(); 
+                        foreach (var post in posts)
+                        {
+                            List<Asset> assets = (from a in context.Assets
+                                                    join ap in context.PostAssets on a.Id equals ap.Imageid
+                                                    where ap.Postid == post.Id
+                                                    select a).ToList();
+
+                            <article class="blog_item">
+                                <div class="blog_item_img">
+                                    <div id="post@(post.Id)" class="carousel slide card-img" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @{
+                                                foreach (var asset in assets)
+                                                {
+                                                    <div class="carousel-item @(asset.Id == 1 ? "active" : "" )">
+
+                                                        @{
+                                                            if (System.IO.Path.GetExtension(asset.Url) == "mp4")
+                                                            {
+                                                                <video src="@asset.Url" class="d-block w-100" controls></video>
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@asset.Url" class="d-block w-100" alt="...">
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        @{
+                                            if (assets.Count > 1)
+                                            {
+                                                <a class="carousel-control-prev" href="#post@(post.Id)" role="button" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#post@(post.Id)" role="button" data-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            }
+                                        }
+                                    </div>
+                                    <span class="blog_item_date">
+                                        <h3>@post.CreatedDate.Day</h3>
+                                        <p>@post.CreatedDate.ToString("MMM")</p>
+                                    </span>
+                                </div>
+
+                                <div class="blog_details">
+                                    <a class="d-inline-block" asp-controller="Post" asp-action="Index" asp-route-postId="@post.Id">
+                                        <h2>@post.Title</h2>
+                                    </a>
+                                    <p>@(post.Content.Length < 150 ? post.Content : post.Content.Substring(0, 150) + " ...")</p>
+                                </div>
+                            </article>
+                        }
+
+                    }
+
+                    <nav class="blog-pagination justify-content-center d-flex">
+                        <ul class="pagination">
+                            <li class="page-item @(pageNum == 0 ? "disabled" : "")">
+                                <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@(pageNum - 1)" class="disabled page-link" aria-label="Previous">
+                                    <i class="ti-angle-left"></i>
+                                </a>
+                            </li>
+                            @{
+                                int postCount = context.Posts.Count();
+                                int count = (postCount % POST_NUM) > 1 ? (postCount / POST_NUM) + 1 : postCount / POST_NUM;
+                                for (int i = 0; i < count; i++) {
+                                    <li class="page-item @(pageNum == i ? "active" : "")">
+                                        <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@i" class="page-link">@(i + 1)</a>
+                                    </li>
+                                }
+                            }
+                            <li class="page-item @(pageNum == count - 1 ? "disabled" : "")">
+                                <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@(pageNum + 1)" class="page-link" aria-label="Next">
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- member_counter counter start -->
+<section class="member_counter">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_member_counter">
+                    <span class="counter">1024</span>
+                    <h4>All Teachers</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_member_counter">
+                    <span class="counter">960</span>
+                    <h4> All Students</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_member_counter">
+                    <span class="counter">1020</span>
+                    <h4>Online Students</h4>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="single_member_counter">
+                    <span class="counter">820</span>
+                    <h4>Ofline Students</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- member_counter counter end -->

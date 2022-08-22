@@ -13,6 +13,7 @@ namespace Stamford.Models
         public int Id { get; set; }
         public string? Title { get; set; }
         public string Content { get; set; } = null!;
+        public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<PostAsset> PostAssets { get; set; }
     }

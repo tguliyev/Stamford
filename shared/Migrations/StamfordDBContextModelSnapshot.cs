@@ -186,6 +186,9 @@ namespace shared.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")

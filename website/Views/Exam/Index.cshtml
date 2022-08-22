@@ -1,12 +1,27 @@
 @{
-    ViewData["title"] = "Exam";
+  ViewData["title"] = "Exam";
 }
 
-<form class="d-flex flex-column align-items-center">
-  <div class="form-group w-25 mb-3">
-    <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter the code">
+<section class="contact-section section_padding">
+  <div class="container">
+    <div class="row">
+
+      <form class="form-contact contact_form" asp-controller="Exam" asp-action="Index" method="post">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Enter your code to reveal exam grade</h4>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <input class="form-control" name="studentCode" id="studentCode" type="text" placeholder='Enter Code'>
+            </div>
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm">Submit</button>
+        </div>
+      </form>
+
+    </div>
   </div>
-  <div class="col-md-12 text-center">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
+</section>
