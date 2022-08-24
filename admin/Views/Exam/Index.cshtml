@@ -2,7 +2,7 @@
     Layout = "_Layout";
 }
 
-@model Stamford.Models.Exam
+@model ExamStudent
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -19,8 +19,8 @@
                 </div>
                  <div class="form-group">
                     <label for="code">Tələbənin Kodu</label>
-                    <input type="text" asp-for="StudentCode" class="form-control" id="code" placeholder="Tələbənin Kodu" style="background-color: #333;"  />
-                    <span asp-validation-for="StudentCode"></span>
+                    <input type="text" asp-for="Code" class="form-control" id="code" placeholder="Tələbənin Kodu" style="background-color: #333;"  />
+                    <span asp-validation-for="Code"></span>
                 </div>
                 <div class="form-group">
                     <label for="mark">Tələbənin Qiyməti</label>

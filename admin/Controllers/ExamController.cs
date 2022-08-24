@@ -17,14 +17,15 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            Stamford.Models.Exam exam = new  Stamford.Models.Exam();
+            ExamStudent exam = new  ExamStudent();
             return View(exam);
         }
         [HttpPost]
-        public IActionResult AddExam( Stamford.Models.Exam es)
+        public IActionResult AddExam( ExamStudent es)
         {
             if(ModelState.IsValid){
-                _context.Exams.Add(es);
+                _context.ExamStudents.Add(es);
+                _context.SaveChanges();
             }
             else {
                 // ViewBag.ErrorMessage = ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
