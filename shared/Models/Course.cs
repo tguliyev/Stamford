@@ -5,6 +5,11 @@ namespace Stamford.Models
 {
     public partial class Course
     {
+        public Course()
+        {
+            Graduates = new HashSet<Graduate>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int Price { get; set; }
@@ -12,5 +17,6 @@ namespace Stamford.Models
         public int ImageId { get; set; }
 
         public virtual Asset Image { get; set; } = null!;
+        public virtual ICollection<Graduate> Graduates { get; set; }
     }
 }

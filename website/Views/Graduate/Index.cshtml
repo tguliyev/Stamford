@@ -18,8 +18,12 @@
             </div>
         </div>
         @{
-            List<Graduate[]> graduates = context.Graduates.Skip(pageNum * ROW * COL).Take(ROW *
-            COL).ToArray().Chunk(COL).ToList();
+            List<Graduate[]> graduates = context.Graduates.Skip(pageNum * ROW * COL)
+                                                            .Take(ROW * COL)
+                                                            .ToArray()
+                                                            .Chunk(COL)
+                                                            .ToList();
+
             for (int i = 0; i < graduates.Count; i++)
             {
                 <div class="row mb-5">
@@ -27,12 +31,13 @@
                         for (int j = 0; j < graduates[i].Length; j++)
                         {
                             Asset asset = context.Assets.First(asset => asset.Id == graduates[i][j].ImageId);
+                            Course course = context.Courses.First(course => course.Id == graduates[i][j].CourseId);
                             <div class="col-sm-6 col-lg-3">
                                 <div class="single_special_cource">
                                     <img src="@asset.Url" class="special_img" alt="">
                                     <div class="special_cource_text">
                                         @* Add link to course details *@
-                                        <a  class="btn_4">Wordpress</a>
+                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@course.Id" class="btn_4">@course.Name</a>
 
                                         <h3>@graduates[i][j].FullName</h3>
                                         <p>@graduates[i][j].Desc</p>

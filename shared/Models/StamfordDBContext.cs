@@ -118,6 +118,13 @@ namespace Stamford.Models
             {
                 entity.HasIndex(e => e.ImageId, "IX_Graduates_ImageId");
 
+                entity.Property(e => e.CourseId).HasColumnName("courseId");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.Graduates)
+                    .HasForeignKey(d => d.CourseId)
+                    .HasConstraintName("FK__Graduates__cours__367C1819");
+
                 entity.HasOne(d => d.Image)
                     .WithMany(p => p.Graduates)
                     .HasForeignKey(d => d.ImageId);
