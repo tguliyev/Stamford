@@ -17,16 +17,12 @@ namespace Stamford.Models
         }
 
         public virtual DbSet<Admin> Admins { get; set; } = null!;
-        public virtual DbSet<Graduate> Graduates { get; set; } = null!;
         public virtual DbSet<Asset> Assets { get; set; } = null!;
+        public virtual DbSet<Course> Courses { get; set; } = null!;
         public virtual DbSet<Exam> Exams { get; set; } = null!;
-        public virtual DbSet<ExamStudent> ExamStudents { get; set; } = null!;
-        public virtual DbSet<Menu> Menus { get; set; } = null!;
+        public virtual DbSet<Graduate> Graduates { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<PostAsset> PostAssets { get; set; } = null!;
-        public virtual DbSet<Schedule> Schedules { get; set; } = null!;
-        public virtual DbSet<Student> Students { get; set; } = null!;
-        public virtual DbSet<Teacher> Teachers { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,6 +45,8 @@ namespace Stamford.Models
                     .HasMaxLength(25)
                     .HasColumnName("email");
 
+                entity.Property(e => e.Imageid).HasColumnName("imageid");
+
                 entity.Property(e => e.Password)
                     .HasMaxLength(255)
                     .HasColumnName("password");
@@ -56,6 +54,11 @@ namespace Stamford.Models
                 entity.Property(e => e.Username)
                     .HasMaxLength(20)
                     .HasColumnName("username");
+
+                entity.HasOne(d => d.Image)
+                    .WithMany(p => p.Admins)
+                    .HasForeignKey(d => d.Imageid)
+                    .HasConstraintName("FK_Admin_Asset");
             });
 
             modelBuilder.Entity<Asset>(entity =>
@@ -69,37 +72,55 @@ namespace Stamford.Models
                     .HasColumnName("url");
             });
 
-            modelBuilder.Entity<Exam>(entity =>
+            modelBuilder.Entity<Course>(entity =>
             {
-                entity.ToTable("Exam");
+                entity.ToTable("Course");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Desc)
+                    .HasColumnType("text")
+                    .HasColumnName("desc");
+
+                entity.Property(e => e.ImageId).HasColumnName("imageId");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(32)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Price).HasColumnName("price");
+
+                entity.HasOne(d => d.Image)
+                    .WithMany(p => p.Courses)
+                    .HasForeignKey(d => d.ImageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Course__imageId__3587F3E0");
             });
 
-            modelBuilder.Entity<ExamStudent>(entity =>
+            modelBuilder.Entity<Exam>(entity =>
             {
-                entity.ToTable("ExamStudent");
+                entity.HasNoKey();
+
+                entity.ToTable("Exam");
+
+                entity.Property(e => e.ExamName).HasMaxLength(32);
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Mark).HasColumnName("mark");
+
+                entity.Property(e => e.StudentCode).HasMaxLength(20);
+
+                entity.Property(e => e.StudentName).HasMaxLength(64);
             });
 
-            modelBuilder.Entity<Menu>(entity =>
+            modelBuilder.Entity<Graduate>(entity =>
             {
-                entity.ToTable("menu");
+                entity.HasIndex(e => e.ImageId, "IX_Graduates_ImageId");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Action)
-                    .HasMaxLength(16)
-                    .HasColumnName("action");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(16)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.Order).HasColumnName("order");
+                entity.HasOne(d => d.Image)
+                    .WithMany(p => p.Graduates)
+                    .HasForeignKey(d => d.ImageId);
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -110,6 +131,8 @@ namespace Stamford.Models
 
                 entity.Property(e => e.Content).HasColumnType("text");
 
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+
                 entity.Property(e => e.Title)
                     .HasMaxLength(100)
                     .HasColumnName("title");
@@ -118,6 +141,10 @@ namespace Stamford.Models
             modelBuilder.Entity<PostAsset>(entity =>
             {
                 entity.ToTable("PostAsset");
+
+                entity.HasIndex(e => e.Imageid, "IX_PostAsset_Imageid");
+
+                entity.HasIndex(e => e.Postid, "IX_PostAsset_Postid");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -130,49 +157,6 @@ namespace Stamford.Models
                     .WithMany(p => p.PostAssets)
                     .HasForeignKey(d => d.Postid)
                     .HasConstraintName("FK__PostAsset__Posti__114A936A");
-            });
-
-            modelBuilder.Entity<Schedule>(entity =>
-            {
-                entity.ToTable("Schedule");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Lessontime).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.ToTable("Student");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Email).HasMaxLength(30);
-
-                entity.Property(e => e.Fullname).HasMaxLength(30);
-
-                entity.Property(e => e.Password).HasMaxLength(255);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(13);
-
-                entity.Property(e => e.Username).HasMaxLength(25);
-            });
-
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                entity.ToTable("Teacher");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Email).HasMaxLength(25);
-
-                entity.Property(e => e.Fullname).HasMaxLength(25);
-
-                entity.Property(e => e.Password).HasMaxLength(255);
-
-                entity.Property(e => e.Phone).HasMaxLength(13);
-
-                entity.Property(e => e.Username).HasMaxLength(30);
             });
 
             OnModelCreatingPartial(modelBuilder);

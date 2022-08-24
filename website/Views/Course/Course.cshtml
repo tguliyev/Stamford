@@ -1,0 +1,63 @@
+@{
+    const int ROW = 3;
+    const int COL = 3;
+    ViewData["title"] = "Graduate";
+    StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
+    if (context == null) throw new ArgumentNullException("Context is null");
+
+    int courseId = (int)ViewData["courseId"];
+}
+
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner text-center">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Course Details</h2>
+                        <p>Home<span>/</span>Course Details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@{
+    Course course = context.Courses.First(course => course.Id == courseId);
+    Asset image = context.Assets.First(asset => asset.Id == course.ImageId);
+}
+<section class="course_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 course_details_left">
+                <div class="main_image">
+                    <img class="img-fluid w-100" src="~/@image.Url" alt="">
+                </div>
+                <div class="content_wrapper">
+                    <h4 class="title_top">Objectives</h4>
+                    <div class="content">
+                        @course.Desc
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 right-contents">
+                <div class="sidebar_top">
+                    <ul>
+                        <li>
+                            <a class="justify-content-between d-flex" href="#">
+                                <p>Course Fee </p>
+                                <span>$@course.Price</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                    @* <a href="#" class="btn_1 d-block">Enroll the course</a> *@
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
