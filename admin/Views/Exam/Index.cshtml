@@ -2,26 +2,30 @@
     Layout = "_Layout";
 }
 
+@model Stamford.Models.Exam
+
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
                    <button  onclick="RazorFunction()" class="btn btn-success mr-2 mt mb-2">Generate Code</button>
             <form class="forms-sample" method="post" asp-action="AddExam"  enctype="multipart/form-data" asp-controller="Exam">
                 <div class="form-group">
-                    <label for="exampleInputName1">Tələbənin Adı</label>
-                    <input type="text" class="form-control" placeholder="Tələbənin Adı">
+                    <label for="stuname">Tələbənin Adı</label>
+                    <input type="text" id="stuname" asp-for="StudentName" class="form-control" placeholder="Tələbənin Adı"> <span asp-validation-for="StudentName"></span>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail3">Fənnin Adı</label>
-                    <input type="text" class="form-control" placeholder="Fənnin Adı"  />
+                    <label for="subjectname">Fənnin Adı</label>
+                    <input type="text" id="subjectname" asp-for="ExamName" class="form-control" placeholder="Fənnin Adı"  /> <span asp-validation-for="ExamName"></span>
                 </div>
                  <div class="form-group">
-                    <label for="exampleInputEmail3">Tələbənin Kodu</label>
-                    <input type="text" disabled="disabled" class="form-control" id="code" placeholder="Tələbənin Kodu" style="background-color: #333;"  />
+                    <label for="code">Tələbənin Kodu</label>
+                    <input type="text" asp-for="StudentCode" class="form-control" id="code" placeholder="Tələbənin Kodu" style="background-color: #333;"  />
+                    <span asp-validation-for="StudentCode"></span>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail3">Tələbənin Qiyməti</label>
-                    <input type="number" class="form-control" min="0" max="100" style="width: 60px;color:#fff"/>
+                    <label for="mark">Tələbənin Qiyməti</label>
+                    <input type="number" id="mark" asp-for="Mark" class="form-control" min="0" max="100" style="width: 60px;color:#fff"/>
+                    <span asp-validation-for="Mark"></span>
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark">Cancel</button>
