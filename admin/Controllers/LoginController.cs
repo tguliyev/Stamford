@@ -23,6 +23,7 @@ public class LoginController : Controller
     public IActionResult Index()
     {
         return View();
+        
     }
     [HttpPost]
     public IActionResult Panel(User user)
@@ -37,7 +38,7 @@ public class LoginController : Controller
             HttpContext.Session.SetString("url", url[0]);
             ViewData["username"] = HttpContext.Session.GetString("username");
             ViewData["url"] = HttpContext.Session.GetString("url");
-            return View();
+            return RedirectToAction("Home", "Admin");
             }
         else return RedirectToAction("Index", "Login");
     }

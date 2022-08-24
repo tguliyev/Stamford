@@ -25,6 +25,8 @@ namespace admin.Controllers
         }
         [HttpPost]
         public IActionResult AddPost([Bind(Prefix = "Item1")] PostViewModel post, [Bind(Prefix = "Item2")] AssetViewModel asset){
+            System.Console.WriteLine($"{post.Content} {post.Title}");
+            System.Console.WriteLine($"{asset.Url}");
             return View();
         }
 

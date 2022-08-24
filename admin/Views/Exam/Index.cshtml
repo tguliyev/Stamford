@@ -1,0 +1,47 @@
+@{
+    Layout = "_Layout";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+                   <button  onclick="RazorFunction()" class="btn btn-success mr-2 mt mb-2">Generate Code</button>
+            <form class="forms-sample" method="post" asp-action="AddExam"  enctype="multipart/form-data" asp-controller="Exam">
+                <div class="form-group">
+                    <label for="exampleInputName1">Tələbənin Adı</label>
+                    <input type="text" class="form-control" placeholder="Tələbənin Adı">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail3">Fənnin Adı</label>
+                    <input type="text" class="form-control" placeholder="Fənnin Adı"  />
+                </div>
+                 <div class="form-group">
+                    <label for="exampleInputEmail3">Tələbənin Kodu</label>
+                    <input type="text" disabled="disabled" class="form-control" id="code" placeholder="Tələbənin Kodu" style="background-color: #333;"  />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail3">Tələbənin Qiyməti</label>
+                    <input type="number" class="form-control" min="0" max="100" style="width: 60px;color:#fff"/>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+ <script>
+    function RazorFunction() 
+    {
+        let arr = []
+        let value = document.getElementById("code")
+        let uuid = crypto.randomUUID()
+
+        let split = uuid.split('-')
+
+        arr.push(split[0])
+
+        code.value = split[0]
+    }
+
+ </script>
