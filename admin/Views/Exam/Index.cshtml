@@ -4,6 +4,7 @@
 
 @model ExamStudent
 
+<div asp-validation-summary="All"></div>
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -28,7 +29,7 @@
                     <span asp-validation-for="Mark"></span>
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-dark">Cancel</button>
+                <button class="btn btn-dark" ><a asp-controller="Admin" asp-action="Home" >Cancel</a></button>
             </form>
         </div>
     </div>
