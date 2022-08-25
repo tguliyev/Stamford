@@ -1,16 +1,17 @@
+using admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Stamford.Models;
 namespace admin.Controllers
 {
     public class PostController : Controller
     {
-        private StamfordDBContext _Content;
+        private StamfordDBContext _context;
         private readonly ILogger<PostController> _logger;
 
         public PostController(ILogger<PostController> logger, StamfordDBContext Content)
         {
             _logger = logger;
-            _Content = Content;
+            _context = Content;
         }
 
         public IActionResult Index()
@@ -35,14 +36,14 @@ namespace admin.Controllers
         //                 Asset asset = new Asset();
         //                 asset.Url = filename;
         //                 post.CreatedDate = DateTime.Now;
-        //                 _Content.Assets.Add(asset);
-        //                 _Content.Posts.Add(post);
-        //                 _Content.SaveChanges();
+        //                 _context.Assets.Add(asset);
+        //                 _context.Posts.Add(post);
+        //                 _context.SaveChanges();
         //                 PostAsset postAsset = new PostAsset();
         //                 postAsset.Imageid = asset.Id;
         //                 postAsset.Postid = post.Id;
-        //                 _Content.PostAssets.Add(postAsset);
-        //                 _Content.SaveChanges();
+        //                 _context.PostAssets.Add(postAsset);
+        //                 _context.SaveChanges();
         //             }
         //         }
         //     }
@@ -55,32 +56,46 @@ namespace admin.Controllers
         [HttpPost]
         public IActionResult AddPost(Post post, List<IFormFile> userfile)
         {
+            Image image = new Image();
             try
             {
                 if (ModelState.IsValid && userfile != null)
                 {
                     post.CreatedDate = DateTime.Now;
-                    _Content.Posts.Add(post);
-                    _Content.SaveChanges();
+                    _context.Posts.Add(post);
+                    _context.SaveChanges();
                     foreach(var formFile in userfile){
-                        if(formFile.Length > 0){
-                            string filename = formFile.FileName;
-                            filename = Path.GetFileName(filename);
-                            string uploadfilepath = Path.Combine(Directory.GetCurrentDirectory(),   "wwwroot\\assets\\images", filename);
-                            using (var stream = new FileStream(uploadfilepath, FileMode.OpenOrCreate))
-                            {
-                                formFile.CopyToAsync(stream);
-                                ViewBag.Message = "File Uploaded";
-                                Asset asset = new Asset();
-                                asset.Url = filename;
-                                _Content.Assets.Add(asset);
-                                _Content.SaveChanges();
-                                PostAsset postAsset = new PostAsset();
-                                postAsset.Imageid = asset.Id;
-                                postAsset.Postid = post.Id;
-                                _Content.PostAssets.Add(postAsset);
-                                _Content.SaveChanges();
-                            }
+                        // if(formFile.Length > 0){
+                        //     string filename = formFile.FileName;
+                        //     filename = Path.GetFileName(filename);
+                        //     string uploadfilepath = Path.Combine(Directory.GetCurrentDirectory(),   "wwwroot\\assets\\images", filename);
+                        //     using (var stream = new FileStream(uploadfilepath, FileMode.OpenOrCreate))
+                        //     {
+                        //         formFile.CopyToAsync(stream);
+                        //         ViewBag.Message = "File Uploaded";
+                        //         Asset asset = new Asset();
+                        //         asset.Url = filename;
+                        //         _context.Assets.Add(asset);
+                        //         _context.SaveChanges();
+                        //         PostAsset postAsset = new PostAsset();
+                        //         postAsset.Imageid = asset.Id;
+                        //         postAsset.Postid = post.Id;
+                        //         _context.PostAssets.Add(postAsset);
+                        //         _context.SaveChanges();
+                        //     }
+                        // }
+                        
+                        var url = image.UploadImage(formFile);
+                        if(url!=""){
+                             Asset asset = new Asset();
+                             asset.Url = url;
+                             _context.Assets.Add(asset);
+                             _context.SaveChanges();
+                             PostAsset postAsset = new PostAsset();
+                             postAsset.Imageid = asset.Id;
+                             postAsset.Postid = post.Id;
+                             _context.PostAssets.Add(postAsset);
+                             _context.SaveChanges();
                         }
                     }
 
