@@ -36,6 +36,9 @@ public class LoginController : Controller
         if (admin.Count==1){
             HttpContext.Session.SetString("username", admin[0].Username);
             HttpContext.Session.SetString("url", url[0]);
+            HttpContext.Session.SetString("mail", admin[0].Email);
+            HttpContext.Session.SetString("password", admin[0].Password);
+
             ViewData["username"] = HttpContext.Session.GetString("username");
             ViewData["url"] = HttpContext.Session.GetString("url");
             return RedirectToAction("Home", "Admin");

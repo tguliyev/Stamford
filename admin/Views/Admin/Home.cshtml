@@ -1,5 +1,37 @@
 @{
     Layout = "_Layout";
 }
+@model Admin
 
-<h1>Salam</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form class="forms-sample" method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="ExhangeProfile">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username" asp-for="Username" >
+                </div>
+                <div class="form-group">
+                    <label for="email">Mail Adress</label>
+                    <input type="email" class="form-control" id="email" placeholder="Açıqlama" asp-for="Email"/>
+                </div>
+                <div class="form-group">
+                    <label>Profil Şəkli</label>
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
+                        <span class="btn btn-danger btn-file">
+                            Browse <input type="file" name="userfile"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" asp-for="Password"/>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark">Cancel</button>
+            </form>
+                <button type="submit" class="btn btn-primary mr-2 mt-3">Şifrəni dəyiş</button>
+        </div>
+    </div>
+</div>
