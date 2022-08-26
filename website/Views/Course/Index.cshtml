@@ -34,7 +34,13 @@
             </div>
         </div>
         @{
-            List<Course[]> courses = context.Courses.Skip(pageNum * ROW * COL).Take(ROW * COL).ToArray().Chunk(COL).ToList();
+            List<Course[]> courses = context.Courses
+                .Skip(pageNum * ROW * COL)
+                .Take(ROW * COL)
+                .ToArray()
+                .Chunk(COL)
+                .ToList();
+                
             for (int i = 0; i < courses.Count; i++)
             {
                 <div class="row mb-5">
