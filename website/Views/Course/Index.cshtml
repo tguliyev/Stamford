@@ -34,30 +34,33 @@
             </div>
         </div>
         @{
-            List<Course[]> courses = context.Courses
+            List<Course> courses = context.Courses
+                .Include(course => course.Image)
                 .Skip(pageNum * ROW * COL)
                 .Take(ROW * COL)
-                .ToArray()
-                .Chunk(COL)
                 .ToList();
-                
-            for (int i = 0; i < courses.Count; i++)
+
+            for (int i = 0; i < ROW; i++)
             {
+                int colNum = courses.Count - (ROW * (i + 1)) >= 0 ? COL : courses.Count - (ROW * (i + 1));
+                if (colNum < 0) break;
+
                 <div class="row mb-5">
                     @{
-                        for (int j = 0; j < courses[i].Length; j++)
+                        for (int j = 0; j < colNum; j++)
                         {
-                            Asset asset = context.Assets.First(asset => asset.Id == courses[i][j].ImageId);
+                            int index = (COL * i) + j;
+
                             <div class="col-sm-6 col-lg-4">
                                 <div class="single_special_cource">
-                                    <img src="@asset.Url" class="special_img" alt="">
+                                    <img src="@courses[index].Image.Url" class="special_img" alt="">
                                     <div class="special_cource_text">
                                         @* Add link to course details *@
-                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@courses[i][j].Id" class="btn_4">@courses[i][j].Name</a>
-                                        <h4>$@courses[i][j].Price</h4>
+                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@courses[index].Id" class="btn_4">@courses[index].Name</a>
+                                        <h4>$@courses[index].Price</h4>
 
-                                        <h3>@courses[i][j].Name</h3>
-                                        <p>@courses[i][j].Desc</p>
+                                        <h3>@courses[index].Name</h3>
+                                        <p>@courses[index].Desc</p>
                                     </div>
 
                                 </div>

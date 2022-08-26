@@ -20,32 +20,32 @@
         </div>
         @{
             watch.Start();
-            List<Graduate[]> graduates = context.Graduates
+            List<Graduate> graduates = context.Graduates
                 .Include(graduate => graduate.Image)
                 .Include(graduate => graduate.Course)
                 .Skip(pageNum * ROW * COL)
                 .Take(ROW * COL)
-                .ToArray()
-                .Chunk(COL)
                 .ToList();
 
-            
-
-            for (int i = 0; i < graduates.Count; i++)
+            for (int i = 0; i < ROW; i++)
             {
+                int colNum = graduates.Count - (ROW * (i + 1)) >= 0 ? COL : graduates.Count - (ROW * (i + 1));
+                if (colNum < 0) break;
+
                 <div class="row mb-5">
                     @{
-                        for (int j = 0; j < graduates[i].Length; j++)
+                        for (int j = 0; j < colNum; j++)
                         {
+                            int index = (COL * i) + j;
                             <div class="col-sm-6 col-lg-3">
                                 <div class="single_special_cource">
-                                    <img src="@graduates[i][j].Image.Url" class="special_img" alt="">
+                                    <img src="@graduates[index].Image.Url" class="special_img" alt="">
                                     <div class="special_cource_text">
                                         @* Add link to course details *@
-                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@graduates[i][j].Course.Id" class="btn_4">@graduates[i][j].Course.Name</a>
+                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@graduates[index].Course.Id" class="btn_4">@graduates[index].Course.Name</a>
 
-                                        <h3>@graduates[i][j].FullName</h3>
-                                        <p>@graduates[i][j].Desc</p>
+                                        <h3>@graduates[index].FullName</h3>
+                                        <p>@graduates[index].Desc</p>
                                     </div>
 
                                 </div>
