@@ -1,9 +1,6 @@
 @{
-
-    string? username = ViewData["username"] as string;
-
-    System.Console.WriteLine(username);
-
+    string? adminjson = TempData["Admin"] as string;
+    Admin? admin = JsonConvert.DeserializeObject<Admin>(adminjson);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +35,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">@username</h5>
+                  <h5 class="mb-0 font-weight-normal">@admin?.Username</h5>
                 </div>
               </div>
               <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
@@ -96,11 +93,11 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Dersler</span>
+              <span class="menu-title">Dərsler</span>
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/icons/mdi.html">
+            <a class="nav-link" asp-controller="Graduate" asp-action="Index">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
@@ -130,7 +127,7 @@
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
                     <img class="img-xs rounded-circle " src="~/assets/images/default.png" alt="Admin Image" />
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">@username</p>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">@admin?.Username</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>

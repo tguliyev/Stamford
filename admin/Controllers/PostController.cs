@@ -32,17 +32,19 @@ namespace admin.Controllers
                     _context.SaveChanges();
                     foreach(var formFile in userfile){
                         var url = image.UploadImage(formFile);
-                        if(url!=""){
-                             Asset asset = new Asset();
-                             asset.Url = url;
-                             _context.Assets.Add(asset);
-                             _context.SaveChanges();
-                             PostAsset postAsset = new PostAsset();
-                             postAsset.Imageid = asset.Id;
-                             postAsset.Postid = post.Id;
-                             _context.PostAssets.Add(postAsset);
-                             _context.SaveChanges();
+                        Asset? asset=null;
+                        var profilephoto = image.CheckPhoto(url,_context);
+                        if(profilephoto==null){
+                            asset = new Asset();
+                            asset.Url = url;
+                            image.UploadImagetoDatabase(asset,_context);
                         }
+                        else asset = profilephoto;
+                        PostAsset postAsset = new PostAsset();
+                        postAsset.Imageid = asset.Id;
+                        postAsset.Postid = post.Id;
+                        _context.PostAssets.Add(postAsset);
+                        _context.SaveChanges();
                     }
 
                 }

@@ -1,4 +1,56 @@
 @{
     Layout = "_Layout";
+    string? isOkay = ViewData["Graduate"] as string;
+    StamfordDBContext? context =  ViewData["context"] as StamfordDBContext;
+    try{
+      if(context == null)throw new ArgumentNullException();
+    }
+    catch (Exception ex){
+        System.Console.WriteLine(ex);
+    }
 }
+@model Graduate
 
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form class="forms-sample" method="post" asp-action="AddGraduate" enctype="multipart/form-data"
+                asp-controller="Graduate">
+                <div class="form-group">
+                    <label for="name">Məzunun adı</label>
+                    <input type="text" id="name" class="form-control" placeholder="Məzunun adı" asp-for="FullName">
+                </div>
+                <div class="form-group">
+                    <label for="price">Diplom haqda açıqlama</label>
+                    <input type="text" id="price" class="form-control" placeholder="Diplom haqda açıqlama" asp-for="Desc"/>
+                </div>
+                <div class="form-group">
+                    <label>Diplomun Şəkli</label>
+                    <div class="input-group col-xs-6" style="width:200px">
+                        <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
+                        <span class="btn btn-danger btn-file">
+                            Browse <input type="file" name="userfile" />
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name">Məzunun Olduğu Fənn</label>
+                    <select class="form-control" name="course">
+                        @{
+                            var courses = context.Courses.Select(c=>c.Name).ToList();
+                            int i=1;
+                            foreach(var course in courses){
+                                <option>@i - @course</option>
+                                i++;
+                            }
+                        }
+
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark"><a asp-controller="Admin" asp-action="Home">Cancel</a></button>
+            </form>
+            <p>@isOkay</p>
+        </div>
+    </div>
+</div>

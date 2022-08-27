@@ -15,44 +15,50 @@ namespace admin.Controllers
         private readonly StamfordDBContext _context;
         private readonly ILogger<CourseController> _logger;
 
-         public CourseController(ILogger<CourseController> logger,StamfordDBContext context)
+        public CourseController(ILogger<CourseController> logger, StamfordDBContext context)
         {
             _context = context;
             _logger = logger;
         }
 
         public IActionResult Index()
-        {  
+        {
             Course course = new Course();
             return View(course);
         }
         [HttpPost]
-        public IActionResult AddCourse(Course course,IFormFile userfile)
+        public IActionResult AddCourse(Course course, IFormFile userfile)
         {
-
             var value = ModelState.Values.ToList();
             bool isValid = false;
-            for(int i=0;i<value.Count;i++){
-                if(i==2)continue;
-                else {
-                    if(value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)isValid = true;
+            for (int i = 0; i < value.Count; i++)
+            {
+                if (i == 2) continue;
+                else
+                {
+                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid) isValid = true;
                 }
             }
-            if(isValid){
+            if (isValid)
+            {
                 Image image = new Image();
-                 var url = image.UploadImage(userfile);
-                        if(url!=""){
-                             Asset asset = new Asset();
-                             asset.Url = url;
-                             _context.Assets.Add(asset);
-                             _context.SaveChanges();
-                             course.ImageId = asset.Id;
-                             _context.Courses.Add(course);
-                             _context.SaveChanges();
-                        }
-                        else{
+                Asset? asset = null;
+                var url = image.UploadImage(userfile);
+                var courseimage = _context.Assets.FirstOrDefault(i => i.Url == url);
+                if (courseimage == null)
+                {
+                    if (url != "")
+                    {
+                        asset = new Asset();
+                        asset.Url = url;
+                        image.UploadImagetoDatabase(asset,_context);
+                    }
+                }
+                else asset = courseimage;
 
-                        }
+                course.ImageId = asset.Id;
+                _context.Courses.Add(course);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index", "Course");

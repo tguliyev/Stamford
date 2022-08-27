@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Stamford.Models;
 
 namespace admin.Models
 {
     public class Image
     {
+
         public string UploadImage(IFormFile userfile)
         {
             if (userfile.Length > 0)
@@ -21,6 +23,16 @@ namespace admin.Models
                 return filename;
             }
             else return "";
+        }
+
+        public Asset? CheckPhoto(string url,StamfordDBContext _context){
+            var image = _context.Assets.FirstOrDefault(i => i.Url == url);
+            if(image==null)return null;
+            else return image;
+        }
+        public void UploadImagetoDatabase(Asset asset,StamfordDBContext _context){
+            _context.Assets.Add(asset);
+            _context.SaveChanges();
         }
 
     }

@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Stamford.Models;
-using System.Linq;
 using admin.Models;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace admin.Controllers;
 
@@ -34,15 +34,17 @@ public class LoginController : Controller
 
         if (admin.Count==1){
             var url = _context.Assets.Where(i=>i.Id==admin[0].Imageid).Select(i=>i.Url).ToList();
-            HttpContext.Session.SetString("username", admin[0].Username);
-            HttpContext.Session.SetString("url", url[0]);
-            HttpContext.Session.SetString("mail", admin[0].Email);
-            HttpContext.Session.SetString("password", admin[0].Password);
 
-            ViewData["username"] = HttpContext.Session.GetString("username");
-            ViewData["url"] = HttpContext.Session.GetString("url");
+            // string jsonString = JsonSerializer.Serialize(admin[0]);
+
+            string jsonString = JsonConvert.SerializeObject(admin[0], Formatting.Indented);
+
+            HttpContext.Session.SetString("admin", jsonString);
+
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
+
             return RedirectToAction("Home", "Admin");
-            }
+        }
         else return RedirectToAction("Index", "Login");
     }
 

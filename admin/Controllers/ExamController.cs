@@ -21,7 +21,7 @@ namespace admin.Controllers
             return View(exam);
         }
         [HttpPost]
-        public IActionResult AddExam( ExamStudent es)
+        public IActionResult AddExam(ExamStudent es)
         {
             if(ModelState.IsValid){
                 _context.ExamStudents.Add(es);
