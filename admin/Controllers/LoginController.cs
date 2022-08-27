@@ -32,8 +32,8 @@ public class LoginController : Controller
 
         var admin = _context.Admins.Where(a=>a.Password == hashpassword && a.Email == user.Email).ToList();
 
-        var url = _context.Assets.Where(i=>i.Id==admin[0].Imageid).Select(i=>i.Url).ToList();
         if (admin.Count==1){
+            var url = _context.Assets.Where(i=>i.Id==admin[0].Imageid).Select(i=>i.Url).ToList();
             HttpContext.Session.SetString("username", admin[0].Username);
             HttpContext.Session.SetString("url", url[0]);
             HttpContext.Session.SetString("mail", admin[0].Email);

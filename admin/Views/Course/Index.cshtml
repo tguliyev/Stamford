@@ -1,0 +1,39 @@
+@{
+    Layout = "_Layout";
+}
+@model Course
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form class="forms-sample" method="post" asp-action="AddCourse" enctype="multipart/form-data"
+                asp-controller="Course">
+                <div class="form-group">
+                    <label for="name">Fənnin Adı</label>
+                    <input type="text" id="name" class="form-control" placeholder="Fənnin Adı" asp-for="Name">
+                </div>
+                <div class="form-group">
+                    <label for="price">Fənnin Qiyməti</label>
+                    <input type="number" id="price" class="form-control" placeholder="Fənnin Qiyməti" asp-for="Price" style="width: 150px;" min="0" />
+                </div>
+                <div class="form-group">
+                    <label>Fənnin Şəkli</label>
+                    <div class="input-group col-xs-6" style="width:200px">
+                        <input type="text" class="form-control file-upload-info" placeholder="Upload Image">
+                        <span class="btn btn-danger btn-file">
+                            Browse <input type="file" name="userfile" />
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Fənnin Açıqlaması</label>
+                        <br />
+                    <textarea  cols="30" rows="10" style=" background-color: #2a3038;color:#fff"
+                        placeholder="Fənnin Açıqlaması" asp-for="Desc">
+                    </textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark"><a asp-controller="Admin" asp-action="Home">Cancel</a></button>
+            </form>
+        </div>
+    </div>
+</div>
