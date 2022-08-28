@@ -39,9 +39,15 @@
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark">Cancel</button>
             </form>
-            <button type="submit" class="btn btn-primary mr-2 mt-3">Şifrəni dəyiş</button>
+            <button class="btn btn-primary mr-2 mt-3" onclick="Exchange()">Şifrəni dəyiş</button>
             <span id="denided">@TempData["validation"]</span>
             <span id="succes">@TempData["success"]</span>    
         </div>
     </div>
 </div>
+<script>
+        function Exchange(){
+            window.location.href = "ExchangePassword";
+        }
+
+</script>

@@ -1,0 +1,17 @@
+@{
+    Layout = "_Layout";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form class="forms-sample" method="post" asp-controller="Admin" asp-action="SetGmailAccount">
+                <div class="form-group">
+                    <label for="username">Gmail - dən gələn kodu daxil edin</label>
+                    <input type="text" class="form-control" id="username" placeholder="Kod" name="code" />
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

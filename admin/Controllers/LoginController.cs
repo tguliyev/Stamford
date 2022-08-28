@@ -35,16 +35,9 @@ public class LoginController : Controller
         if (admin != null)
         {
             string? url = _context.Assets.Where(i => i.Id == admin.Imageid).Select(i => i.Url).FirstOrDefault();
-
-            // string jsonString = JsonSerializer.Serialize(admin[0]);
-
-            // string jsonString = JsonConvert.SerializeObject(admin, Formatting.Indented);
-
             HttpContext.Session.SetString("username",admin.Username);
+            HttpContext.Session.SetString("gmail",admin.Email);
             HttpContext.Session.SetString("url",url);
-
-
-
             TempData["username"] = HttpContext.Session.GetString("username");
             TempData["url"] = HttpContext.Session.GetString("url");
 
