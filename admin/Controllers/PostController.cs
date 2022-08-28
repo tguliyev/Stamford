@@ -16,7 +16,8 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            var tupple = (new Post());
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
+            var tupple = new Post();
             return View(tupple);
         }
         [HttpPost]

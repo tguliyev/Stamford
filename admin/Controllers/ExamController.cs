@@ -17,12 +17,14 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
             ExamStudent exam = new  ExamStudent();
             return View(exam);
         }
         [HttpPost]
         public IActionResult AddExam(ExamStudent es)
         {
+           
             if(ModelState.IsValid){
                 _context.ExamStudents.Add(es);
                 _context.SaveChanges();

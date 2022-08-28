@@ -23,6 +23,7 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
             Course course = new Course();
             return View(course);
         }

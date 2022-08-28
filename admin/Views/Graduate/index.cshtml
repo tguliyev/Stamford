@@ -37,7 +37,7 @@
                     <label for="name">Məzunun Olduğu Fənn</label>
                     <select class="form-control" name="course">
                         @{
-                            var courses = context.Courses.Select(c=>c.Name).ToList();
+                            var courses = context?.Courses.Select(c=>c.Name).ToList();
                             int i=1;
                             foreach(var course in courses){
                                 <option>@i - @course</option>

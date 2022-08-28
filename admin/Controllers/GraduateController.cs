@@ -17,6 +17,7 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
             ViewData["context"] = _context;
             Graduate graduate = new Graduate();
             return View(graduate);

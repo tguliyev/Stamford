@@ -17,7 +17,7 @@ namespace admin.Controllers
 
         public IActionResult Home()
         {
-
+            TempData["Admin"] = HttpContext.Session.GetString("admin");
             Admin admin = new();
             return View(admin);
         }
@@ -70,6 +70,10 @@ namespace admin.Controllers
             }
 
             return RedirectToAction("Home", "Admin");
+        }
+
+        public IActionResult ExchangePassword(){
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
