@@ -16,7 +16,8 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+            TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
             var tupple = new Post();
             return View(tupple);
         }
@@ -24,37 +25,29 @@ namespace admin.Controllers
         public IActionResult AddPost(Post post, List<IFormFile> userfile)
         {
             Image image = new Image();
-            try
+            if (ModelState.IsValid && userfile != null)
             {
-                if (ModelState.IsValid && userfile != null)
+                post.CreatedDate = DateTime.Now;
+                _context.Posts.Add(post);
+                _context.SaveChanges();
+                foreach (var formFile in userfile)
                 {
-                    post.CreatedDate = DateTime.Now;
-                    _context.Posts.Add(post);
+                    var url = image.UploadImage(formFile);
+                    Asset asset = new Asset();
+                    asset.Url = url;
+                    image.UploadImagetoDatabase(asset, _context);
+                    PostAsset postAsset = new PostAsset();
+                    postAsset.Imageid = asset.Id;
+                    postAsset.Postid = post.Id;
+                    _context.PostAssets.Add(postAsset);
                     _context.SaveChanges();
-                    foreach(var formFile in userfile){
-                        var url = image.UploadImage(formFile);
-                        Asset? asset=null;
-                        var profilephoto = image.CheckPhoto(url,_context);
-                        if(profilephoto==null){
-                            asset = new Asset();
-                            asset.Url = url;
-                            image.UploadImagetoDatabase(asset,_context);
-                        }
-                        else asset = profilephoto;
-                        PostAsset postAsset = new PostAsset();
-                        postAsset.Imageid = asset.Id;
-                        postAsset.Postid = post.Id;
-                        _context.PostAssets.Add(postAsset);
-                        _context.SaveChanges();
-                    }
-
+                     TempData["success"] = "Paylaşım əlavə olundu";
                 }
+            }
+            else{
+                TempData["validation"] = ModelState.Values.FirstOrDefault(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
+            }
 
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Alinmadi " + ex.Message.ToString();
-            }
 
             return RedirectToAction("Index", "Post");
         }

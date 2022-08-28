@@ -1,6 +1,5 @@
 @{
     Layout = "_Layout";
-    string? isOkay = ViewData["Graduate"] as string;
     StamfordDBContext? context =  ViewData["context"] as StamfordDBContext;
     try{
       if(context == null)throw new ArgumentNullException();
@@ -10,6 +9,15 @@
     }
 }
 @model Graduate
+
+<style>
+    #denided{
+        color: red;
+    }
+    #succes{
+        color:green;
+    }
+</style>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -50,7 +58,8 @@
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark"><a asp-controller="Admin" asp-action="Home">Cancel</a></button>
             </form>
-            <p>@isOkay</p>
+            <span id="denided">@TempData["validation"]</span>
+            <span id="succes">@TempData["success"]</span>  
         </div>
     </div>
 </div>

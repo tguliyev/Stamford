@@ -17,7 +17,8 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+            TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
             ExamStudent exam = new  ExamStudent();
             return View(exam);
         }
@@ -28,9 +29,10 @@ namespace admin.Controllers
             if(ModelState.IsValid){
                 _context.ExamStudents.Add(es);
                 _context.SaveChanges();
+                TempData["success"] = "İmtahan nəticəsi əlavə olundu";
             }
             else {
-                // ViewBag.ErrorMessage = ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
+                 TempData["validation"]= ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
             }
             return RedirectToAction("Index","Exam",es);
         }

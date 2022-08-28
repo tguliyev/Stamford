@@ -23,7 +23,8 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+           TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
             Course course = new Course();
             return View(course);
         }
@@ -37,29 +38,28 @@ namespace admin.Controllers
                 if (i == 2) continue;
                 else
                 {
-                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid) isValid = true;
+                      if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+                    {
+                        isValid = false;
+                        break;
+                    }
+                    else isValid = true;
                 }
             }
             if (isValid)
             {
                 Image image = new Image();
-                Asset? asset = null;
                 var url = image.UploadImage(userfile);
-                var courseimage = _context.Assets.FirstOrDefault(i => i.Url == url);
-                if (courseimage == null)
-                {
-                    if (url != "")
-                    {
-                        asset = new Asset();
-                        asset.Url = url;
-                        image.UploadImagetoDatabase(asset,_context);
-                    }
-                }
-                else asset = courseimage;
-
+                Asset asset = new Asset();
+                asset.Url = url;
+                image.UploadImagetoDatabase(asset,_context);
                 course.ImageId = asset.Id;
                 _context.Courses.Add(course);
                 _context.SaveChanges();
+                TempData["success"] = "Course əlavə olundu";
+            }
+            else{
+                 TempData["validation"]= ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
             }
 
             return RedirectToAction("Index", "Course");

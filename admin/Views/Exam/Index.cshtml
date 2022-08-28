@@ -4,6 +4,15 @@
 
 @model ExamStudent
 
+<style>
+    #denided{
+        color: red;
+    }
+    #succes{
+        color:green;
+    }
+</style>
+
 <div asp-validation-summary="All"></div>
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -31,6 +40,8 @@
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark" ><a asp-controller="Admin" asp-action="Home" >Cancel</a></button>
             </form>
+            <span id="denided">@TempData["validation"]</span>
+            <span id="succes">@TempData["success"]</span>  
         </div>
     </div>
 </div>

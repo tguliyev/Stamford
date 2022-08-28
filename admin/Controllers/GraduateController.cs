@@ -17,7 +17,8 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+            TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
             ViewData["context"] = _context;
             Graduate graduate = new Graduate();
             return View(graduate);
@@ -34,7 +35,12 @@ namespace admin.Controllers
                 if (i == 1) continue;
                 else
                 {
-                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid) isValid = true;
+                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+                    {
+                        isValid = false;
+                        break;
+                    }
+                    else isValid = true;
                 }
             }
 
@@ -45,21 +51,18 @@ namespace admin.Controllers
                 Image image = new Image();
 
                 var url = image.UploadImage(userfile);
-                Asset? asset = null;
-                var profilephoto = image.CheckPhoto(url, _context);
-                if (profilephoto == null)
-                {
-                    asset = new Asset();
-                    asset.Url = url;
-                    image.UploadImagetoDatabase(asset, _context);
-                }
-                else asset = profilephoto;
-
+                Asset asset = new Asset();
+                asset.Url = url;
+                image.UploadImagetoDatabase(asset, _context);
                 graduate.ImageId = asset.Id;
                 graduate.CourseId = courseid;
                 _context.Graduates.Add(graduate);
                 _context.SaveChanges();
-                ViewData["Graduate"] = "Hersey Ela oldu";
+                TempData["success"] = "Naliyyət nəticəsi əlavə olundu";
+            }
+            else
+            {
+                TempData["validation"] = ModelState.Values.FirstOrDefault(x => x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
             }
             return RedirectToAction("Index", "Graduate");
         }

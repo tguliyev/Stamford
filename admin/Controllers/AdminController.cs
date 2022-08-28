@@ -17,62 +17,75 @@ namespace admin.Controllers
 
         public IActionResult Home()
         {
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+            TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
             Admin admin = new();
             return View(admin);
         }
         [HttpPost]
         public IActionResult ExhangeProfile(Admin admin, IFormFile userfile)
         {
-            User user = new User();
-            var email = HttpContext.Session.GetString("mail");
-            var password = HttpContext.Session.GetString("password");
-            CurrentAdmin = user.CurrentUser(email, password, _context);
-            Image image = new Image();
+            string? username = HttpContext.Session.GetString("username");
             bool isValid = false;
             var value = ModelState.Values.ToList();
             var state = value[2].ValidationState;
+            Admin? currentadmin = null;
+            if (username != null)
+            {
+                currentadmin = _context.Admins.Where(a => a.Username == username).FirstOrDefault();
+            }
 
             for (int i = 0; i < value.Count; i++)
             {
                 if (i == 2) continue;
                 else
                 {
-                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid) isValid = true;
+                    if (value[i].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+                    {
+                        isValid = false;
+                        break;
+                    }
+                    else isValid = true;
                 }
             }
 
             if (state == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid && isValid)
             {
-                CurrentAdmin.Email = admin.Email;
-                CurrentAdmin.Password = Hash.CreateMD5Hash(admin.Password);
-                CurrentAdmin.Username = admin.Username;
+                currentadmin.Email = admin.Email;
+                currentadmin.Password = Hash.CreateMD5Hash(admin.Password);
+                currentadmin.Username = admin.Username;
                 _context.SaveChanges();
+                HttpContext.Session.SetString("username", admin.Username);
+                TempData["username"] = HttpContext.Session.GetString("username");
+                TempData["success"] = "Dəyişəkliklər əlavə olundu";
             }
             else if (state == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid && isValid)
             {
+                Image image = new Image();
                 var url = image.UploadImage(userfile);
-
-                var profilepicture = _context.Assets.FirstOrDefault(i => i.Url == url);
-                Asset? asset=null;
-                if(profilepicture == null){
-                    asset = new Asset();
-                    if (url != "") asset.Url = url;
-                    image.UploadImagetoDatabase(asset,_context);
-                }
-                else asset = profilepicture;
-                
-                CurrentAdmin.Imageid = asset.Id;
-                CurrentAdmin.Email = admin.Email;
-                CurrentAdmin.Password = Hash.CreateMD5Hash(admin.Password);
-                CurrentAdmin.Username = admin.Username;
+                Asset asset = new Asset();
+                asset.Url = url;
+                image.UploadImagetoDatabase(asset, _context);
+                currentadmin.Imageid = asset.Id;
+                currentadmin.Email = admin.Email;
+                currentadmin.Password = Hash.CreateMD5Hash(admin.Password);
+                currentadmin.Username = admin.Username;
                 _context.SaveChanges();
+                HttpContext.Session.SetString("username", admin.Username);
+                HttpContext.Session.SetString("url", asset.Url);
+                TempData["username"] = HttpContext.Session.GetString("username");
+                TempData["url"] = HttpContext.Session.GetString("url");
+                TempData["success"] = "Dəyişəkliklər əlavə olundu";
+            }
+            else{
+                 TempData["validation"]= ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
             }
 
             return RedirectToAction("Home", "Admin");
         }
 
-        public IActionResult ExchangePassword(){
+        public IActionResult ExchangePassword()
+        {
             return View();
         }
 

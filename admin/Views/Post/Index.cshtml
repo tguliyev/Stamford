@@ -2,7 +2,14 @@
 @{
     Layout = "_Layout";
 }
-
+<style>
+    #denided{
+        color: red;
+    }
+    #succes{
+        color:green;
+    }
+</style>
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -27,6 +34,8 @@
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark" asp-controller="Admin" asp-action="Home">Cancel</button>
             </form>
+            <span id="denided">@TempData["validation"]</span>
+            <span id="succes">@TempData["success"]</span>  
         </div>
     </div>
 </div>

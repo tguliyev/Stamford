@@ -2,6 +2,14 @@
     Layout = "_Layout";
 }
 @model Admin
+<style>
+    #denided{
+        color: red;
+    }
+    #succes{
+        color:green;
+    }
+</style>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -31,7 +39,9 @@
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark">Cancel</button>
             </form>
-                <button type="submit" class="btn btn-primary mr-2 mt-3">Şifrəni dəyiş</button>
+            <button type="submit" class="btn btn-primary mr-2 mt-3">Şifrəni dəyiş</button>
+            <span id="denided">@TempData["validation"]</span>
+            <span id="succes">@TempData["success"]</span>    
         </div>
     </div>
 </div>

@@ -23,29 +23,38 @@ public class LoginController : Controller
     public IActionResult Index()
     {
         return View();
-        
+
     }
     [HttpPost]
     public IActionResult Panel(User user)
     {
         var hashpassword = Hash.CreateMD5Hash(user.Password);
 
-        var admin = _context.Admins.Where(a=>a.Password == hashpassword && a.Email == user.Email).ToList();
+        var admin = _context.Admins.Where(a => a.Password == hashpassword && a.Email == user.Email).FirstOrDefault();
 
-        if (admin.Count==1){
-            var url = _context.Assets.Where(i=>i.Id==admin[0].Imageid).Select(i=>i.Url).ToList();
+        if (admin != null)
+        {
+            string? url = _context.Assets.Where(i => i.Id == admin.Imageid).Select(i => i.Url).FirstOrDefault();
 
             // string jsonString = JsonSerializer.Serialize(admin[0]);
 
-            string jsonString = JsonConvert.SerializeObject(admin[0], Formatting.Indented);
+            // string jsonString = JsonConvert.SerializeObject(admin, Formatting.Indented);
 
-            HttpContext.Session.SetString("admin", jsonString);
+            HttpContext.Session.SetString("username",admin.Username);
+            HttpContext.Session.SetString("url",url);
 
-            TempData["Admin"] = HttpContext.Session.GetString("admin");
+
+
+            TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["url"] = HttpContext.Session.GetString("url");
 
             return RedirectToAction("Home", "Admin");
         }
-        else return RedirectToAction("Index", "Login");
+        else
+        {
+            TempData["mjg"] = "Şifrə və ya Mail address yanlışdır";
+            return RedirectToAction("Index", "Login");
+        }
     }
 
     // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
