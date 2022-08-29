@@ -19,7 +19,7 @@ namespace Stamford.Models
         public virtual DbSet<Admin> Admins { get; set; } = null!;
         public virtual DbSet<Asset> Assets { get; set; } = null!;
         public virtual DbSet<Course> Courses { get; set; } = null!;
-        public virtual DbSet<Exam> Exams { get; set; } = null!;
+        public virtual DbSet<ExamStudent> ExamStudents { get; set; } = null!;
         public virtual DbSet<Graduate> Graduates { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<PostAsset> PostAssets { get; set; } = null!;
@@ -97,21 +97,17 @@ namespace Stamford.Models
                     .HasConstraintName("FK__Course__imageId__3587F3E0");
             });
 
-            modelBuilder.Entity<Exam>(entity =>
+            modelBuilder.Entity<ExamStudent>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.ToTable("Exam");
-
-                entity.Property(e => e.ExamName).HasMaxLength(32);
+                entity.ToTable("ExamStudent");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Mark).HasColumnName("mark");
+                entity.Property(e => e.Code).HasMaxLength(20);
 
-                entity.Property(e => e.StudentCode).HasMaxLength(20);
+                entity.Property(e => e.ExamName).HasMaxLength(32);
 
-                entity.Property(e => e.StudentName).HasMaxLength(64);
+                entity.Property(e => e.StudentName).HasMaxLength(62);
             });
 
             modelBuilder.Entity<Graduate>(entity =>
@@ -123,6 +119,7 @@ namespace Stamford.Models
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Graduates)
                     .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Graduates__cours__367C1819");
 
                 entity.HasOne(d => d.Image)

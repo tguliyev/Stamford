@@ -1,11 +1,10 @@
-﻿@{
-    const int POST_NUM = 5;
+﻿@model List<Post>
+@{
     ViewData["title"] = "Home Page";
-    StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
-    if (context == null) throw new ArgumentNullException("Context is null");
 
     int pageNum = (int)ViewData["pageNum"];
-    Stopwatch watch = new Stopwatch();
+    int POST_NUM = (int)ViewData["POST_NUM"];
+    int pageCount = (int)ViewData["pageCount"];
 }
 
 <!-- banner part start-->
@@ -36,25 +35,18 @@
             <div class="col-lg-10 mb-5 mb-lg-0">
                 <div class="blog_left_sidebar">
                     @{
-                        @* Add skip pageNum check if value more than post.Count *@
-                        watch.Start();
-                        List<Post> posts = context.Posts
-                            .Include(post => post.PostAssets)
-                            .ThenInclude(postAsset => postAsset.Image)
-                            .Skip(pageNum * POST_NUM)
-                            .Take(POST_NUM)
-                            .ToList();
 
-                        foreach (Post post in posts)
+                        foreach (Post post in Model)
                         {
                             <article class="blog_item">
                                 <div class="blog_item_img">
                                     <div id="post@(post.Id)" class="carousel slide card-img" data-ride="carousel">
                                         <div class="carousel-inner">
                                             @{
+
                                                 foreach (PostAsset asset in post.PostAssets)
                                                 {
-                                                    <div class="carousel-item @(asset.Id == 1 ? "active" : "" )">
+                                                    <div class="carousel-item @(post.PostAssets.First().Id == asset.Id ? "active" : "" )">
 
                                                         @{
                                                             if (System.IO.Path.GetExtension(asset.Image.Url) == "mp4")
@@ -99,8 +91,7 @@
                                 </div>
                             </article>
                         }
-                        watch.Stop();
-                        Console.WriteLine(watch.ElapsedMilliseconds);
+
                     }
 
                     <nav class="blog-pagination justify-content-center d-flex">
@@ -110,16 +101,7 @@
                                     <i class="ti-angle-left"></i>
                                 </a>
                             </li>
-                            @{
-                                int postCount = context.Posts.Count();
-                                int count = (postCount % POST_NUM) > 1 ? (postCount / POST_NUM) + 1 : postCount / POST_NUM;
-                                for (int i = 0; i < count; i++) {
-                                    <li class="page-item @(pageNum == i ? "active" : "")">
-                                        <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@i" class="page-link">@(i + 1)</a>
-                                    </li>
-                                }
-                            }
-                            <li class="page-item @(pageNum == count - 1 ? "disabled" : "")">
+                            <li class="page-item @(pageNum == pageCount - 1 ? "disabled" : "")">
                                 <a asp-controller="Home" asp-action="Index" asp-route-pageNum="@(pageNum + 1)" class="page-link" aria-label="Next">
                                     <i class="ti-angle-right"></i>
                                 </a>
@@ -131,36 +113,3 @@
         </div>
     </div>
 </section>
-
-<!-- member_counter counter start -->
-<section class="member_counter">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-sm-6">
-                <div class="single_member_counter">
-                    <span class="counter">1024</span>
-                    <h4>All Teachers</h4>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="single_member_counter">
-                    <span class="counter">960</span>
-                    <h4> All Students</h4>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="single_member_counter">
-                    <span class="counter">1020</span>
-                    <h4>Online Students</h4>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="single_member_counter">
-                    <span class="counter">820</span>
-                    <h4>Ofline Students</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- member_counter counter end -->

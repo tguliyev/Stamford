@@ -4,7 +4,10 @@
     if (context == null) throw new ArgumentNullException("Context is null");
 
     int postId = (int)ViewData["postid"];
-    Post post = context.Posts.First(post => post.Id == postId);
+    Post post = context.Posts
+        .Include(post => post.PostAssets)
+        .ThenInclude(postAsset => postAsset.Image)
+        .First(post => post.Id == postId);
 }
 
 <!-- breadcrumb start-->
@@ -30,26 +33,22 @@
                 <div class="single-post">
                     <div class="feature-img">
                         @{
-                            List<Asset> assets = (from a in context.Assets
-                                                    join ap in context.PostAssets on a.Id equals ap.Imageid
-                                                    where ap.Postid == post.Id
-                                                    select a).ToList();
 
                             <div id="post@(post.Id)" class="carousel slide img-fluid" data-ride="carousel">
                                 <div class="carousel-inner">
                                     @{
-                                        foreach (var asset in assets)
+                                        foreach (PostAsset asset in post.PostAssets)
                                         {
                                             <div class="carousel-item @(asset.Id == 1 ? "active" : "" )">
 
                                                 @{
-                                                    if (System.IO.Path.GetExtension(asset.Url) == "mp4")
+                                                    if (System.IO.Path.GetExtension(asset.Image.Url) == "mp4")
                                                     {
-                                                        <video src="@asset.Url" class="d-block w-100" controls></video>
+                                                        <video src="@asset.Image.Url" class="d-block w-100" controls></video>
                                                     }
                                                     else
                                                     {
-                                                        <img src="@asset.Url" class="d-block w-100" alt="...">
+                                                        <img src="@asset.Image.Url" class="d-block w-100" alt="...">
                                                     }
                                                 }
 
@@ -58,7 +57,7 @@
                                     }
                                 </div>
                                 @{
-                                    if (assets.Count > 1)
+                                    if (post.PostAssets.Count() > 1)
                                     {
                                         <a class="carousel-control-prev" href="#post@(post.Id)" role="button" data-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

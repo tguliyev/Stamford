@@ -1,3 +1,4 @@
+@model bool
 @{
   ViewData["title"] = "Exam";
 }
@@ -6,7 +7,7 @@
   <div class="container">
     <div class="row">
 
-      <form class="form-contact contact_form" asp-controller="Exam" asp-action="Index" method="post">
+      <form class="form-contact contact_form" asp-controller="Exam" asp-action="Result" method="post">
         <div class="row">
           <div class="col-sm-6">
             <h4>Enter your code to reveal exam grade</h4>
@@ -14,6 +15,14 @@
           <div class="col-12">
             <div class="form-group">
               <input class="form-control" name="studentCode" id="studentCode" type="text" placeholder='Enter Code'>
+              @{
+                if (Model)
+                {
+                  <div class="mt-2 text-danger">
+                    Telebenin codu duzgun deil
+                  </div>
+                }
+              }
             </div>
           </div>
         </div>

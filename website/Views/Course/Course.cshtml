@@ -1,11 +1,12 @@
 @{
-    const int ROW = 3;
-    const int COL = 3;
     ViewData["title"] = "Graduate";
     StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
     if (context == null) throw new ArgumentNullException("Context is null");
 
     int courseId = (int)ViewData["courseId"];
+    Course course = context.Courses
+        .Include(course => course.Image)
+        .First(course => course.Id == courseId);
 }
 
 <section class="breadcrumb breadcrumb_bg">
@@ -23,16 +24,12 @@
     </div>
 </section>
 
-@{
-    Course course = context.Courses.First(course => course.Id == courseId);
-    Asset image = context.Assets.First(asset => asset.Id == course.ImageId);
-}
 <section class="course_details_area section_padding">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 course_details_left">
                 <div class="main_image">
-                    <img class="img-fluid w-100" src="~/@image.Url" alt="">
+                    <img class="img-fluid w-100" src="~/@course.Image.Url" alt="">
                 </div>
                 <div class="content_wrapper">
                     <h4 class="title_top">@course.Name</h4>
@@ -54,7 +51,6 @@
                         </li>
 
                     </ul>
-                    @* <a href="#" class="btn_1 d-block">Enroll the course</a> *@
                 </div>
                 
             </div>

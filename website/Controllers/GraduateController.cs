@@ -1,20 +1,36 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stamford.Models;
 
 public class GraduateController : Controller
 {
-
     private StamfordDBContext _context;
+    private const int ROW = 3;
+    private const int COL = 4;
 
     public GraduateController(StamfordDBContext context)
     {
         _context = context;
     }
 
-    public IActionResult Index(int pageNum)
+    public IActionResult Index(int pageNum = 0)
     {
-        ViewData["context"] = _context;
+        int postCount = _context.Graduates.Count();
+        int pageCount = (postCount % (ROW * COL)) > 0 ? (postCount / (ROW * COL)) + 1 : postCount / (ROW * COL);
+        pageNum = pageNum < 0 || pageNum > pageCount ? 0 : pageNum;
+
+        List<Graduate> graduates = _context.Graduates
+            .Include(graduate => graduate.Image)
+            .Include(graduate => graduate.Course)
+            .Skip(pageNum * ROW * COL)
+            .Take(ROW * COL)
+            .ToList();
+
+        ViewData["ROW"] = ROW;
+        ViewData["COL"] = COL;
         ViewData["pageNum"] = pageNum;
-        return View();
+        ViewData["pageCount"] = pageCount;
+
+        return View(graduates);
     }
 }
