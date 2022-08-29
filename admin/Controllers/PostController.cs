@@ -34,14 +34,14 @@ namespace admin.Controllers
                 {
                     var url = image.UploadImage(formFile);
                     Asset asset = new Asset();
-                    asset.Url = url;
+                    asset.Url = url.Result;
                     image.UploadImagetoDatabase(asset, _context);
                     PostAsset postAsset = new PostAsset();
                     postAsset.Imageid = asset.Id;
                     postAsset.Postid = post.Id;
                     _context.PostAssets.Add(postAsset);
                     _context.SaveChanges();
-                     TempData["success"] = "Paylaşım əlavə olundu";
+                    TempData["success"] = "Paylaşım əlavə olundu";
                 }
             }
             else{

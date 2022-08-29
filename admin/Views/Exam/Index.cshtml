@@ -38,7 +38,7 @@
                     <span asp-validation-for="Mark"></span>
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-dark" ><a asp-controller="Admin" asp-action="Home" >Cancel</a></button>
+                <button class="btn btn-dark" ><a asp-controller="Admin" asp-action="Index" >Cancel</a></button>
             </form>
             <span id="denided">@TempData["validation"]</span>
             <span id="succes">@TempData["success"]</span>  
@@ -55,9 +55,9 @@
 
         let split = uuid.split('-')
 
-        arr.push(split[0])
+        arr.push(split[4])
 
-        code.value = split[0]
+        code.value = split[4]
     }
 
  </script>

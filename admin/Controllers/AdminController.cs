@@ -10,22 +10,29 @@ namespace admin.Controllers
 
         private static int _code = 0;
 
+        private static string newpassw = "";
+
         public AdminController(ILogger<AdminController> logger, StamfordDBContext Context)
         {
             _logger = logger;
             _context = Context;
         }
 
-        public IActionResult Home()
+        public IActionResult Index()
         {
+            
             TempData["username"] = HttpContext.Session.GetString("username");
             TempData["url"] = HttpContext.Session.GetString("url");
             Admin admin = new();
+            // var isSession = Session.CheckSession(HttpContext);
+            // if(!isSession)return RedirectToAction("Index","Login");
+            //else 
             return View(admin);
         }
         [HttpPost]
         public IActionResult ExhangeProfile(Admin admin, IFormFile userfile)
         {
+
             string? username = HttpContext.Session.GetString("username");
             bool isValid = false;
             var value = ModelState.Values.ToList();
@@ -65,7 +72,7 @@ namespace admin.Controllers
                 Image image = new Image();
                 var url = image.UploadImage(userfile);
                 Asset asset = new Asset();
-                asset.Url = url;
+                asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset, _context);
                 currentadmin.Imageid = asset.Id;
                 currentadmin.Email = admin.Email;
@@ -95,24 +102,24 @@ namespace admin.Controllers
             if(ModelState.IsValid){
                 var pass = Hash.CreateMD5Hash(oldpass);
                 Admin? admin = _context.Admins.Where(a=>a.Password == pass).FirstOrDefault();
-                if(admin!=null){
+                if(admin!=null && newpass == retry){
+                    newpassw = newpass;
                     return RedirectToAction("SetGmailAccount", "Admin");
                 }
                 else{
-                    TempData["pass"] = "Köhnə parol yanlışdır";
-                    return RedirectToAction("Home", "Admin");
+                    TempData["pass"] = "Yeni və ya köhnə şifrəni kontrol eliyin";
+                    return RedirectToAction("ExchangePassword", "Admin");
                 }
             }
             else{
-
+                
                  return RedirectToAction("ExchangePassword", "Admin");
-                }
+            }
         }
         public IActionResult SetGmailAccount(){
             Random rand = new Random();
             _code = rand.Next(10000,99999);
             System.Console.WriteLine(_code);
-
             string? email = HttpContext.Session.GetString("gmail");
             Email.SendCodeWithEmail(email,_code);
             return View();
@@ -121,7 +128,16 @@ namespace admin.Controllers
         [HttpPost]
         public IActionResult SetGmailAccount(string code)
         {
-            System.Console.WriteLine(_code);
+            if(Convert.ToInt32(code)==_code){
+                string? email = HttpContext.Session.GetString("gmail");
+                Admin? admin = _context.Admins.Where(a=>a.Email == email).FirstOrDefault();
+                admin.Password = Hash.CreateMD5Hash(newpassw);
+                _context.SaveChanges();
+                TempData["Changed"] = "Şifrə dəyişdirildi";
+            }
+            else{
+                TempData["NoChanged"] = "Kod yanlışdır";
+            }
 
             return View();
         }

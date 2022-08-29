@@ -23,7 +23,7 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-           TempData["username"] = HttpContext.Session.GetString("username");
+            TempData["username"] = HttpContext.Session.GetString("username");
             TempData["url"] = HttpContext.Session.GetString("url");
             Course course = new Course();
             return View(course);
@@ -51,7 +51,7 @@ namespace admin.Controllers
                 Image image = new Image();
                 var url = image.UploadImage(userfile);
                 Asset asset = new Asset();
-                asset.Url = url;
+                asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset,_context);
                 course.ImageId = asset.Id;
                 _context.Courses.Add(course);

@@ -9,7 +9,7 @@ namespace admin.Models
     public class Image
     {
 
-        public string UploadImage(IFormFile userfile)
+        public async Task<string> UploadImage(IFormFile userfile)
         {
             if (userfile.Length > 0)
             {
@@ -22,7 +22,7 @@ namespace admin.Models
                 string uploadfilepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\assets\\images", filename);
                 using (var stream = new FileStream(uploadfilepath, FileMode.OpenOrCreate))
                 {
-                    userfile.CopyToAsync(stream);
+                    await userfile.CopyToAsync(stream);
                 }
                 return filename;
             }

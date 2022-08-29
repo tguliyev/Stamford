@@ -52,7 +52,7 @@ namespace admin.Controllers
 
                 var url = image.UploadImage(userfile);
                 Asset asset = new Asset();
-                asset.Url = url;
+                asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset, _context);
                 graduate.ImageId = asset.Id;
                 graduate.CourseId = courseid;

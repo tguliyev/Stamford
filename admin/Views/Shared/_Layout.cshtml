@@ -5,8 +5,13 @@
       string? url = TempData["url"] as string;
 
       string? path = "~/assets/images/" + url;
+      System.Console.WriteLine(HttpContextAccessor.HttpContext.Response.Headers);
+      if(HttpContextAccessor.HttpContext.Session.Keys.Count() < 1){
+         HttpContextAccessor.HttpContext.Response.Redirect("Login/Index");
+      } 
 
 }
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +36,7 @@
   <div class="container-scroller">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" asp-controller="Admin" asp-action="Home">Stamford</a>
+        <a class="sidebar-brand brand-logo" asp-controller="Admin" asp-action="Index">Stamford</a>
       </div>
       <ul class="nav">
         <li class="nav-item profile">
@@ -48,7 +53,7 @@
             <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
             <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
               aria-labelledby="profile-dropdown">
-              <a asp-controller="Admin" asp-action="Home" class="dropdown-item preview-item">
+              <a asp-controller="Admin" asp-action="Index" class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
                   <div class="preview-icon bg-dark rounded-circle">
                     <i class="mdi mdi-settings text-primary"></i>
@@ -59,7 +64,7 @@
                 </div>
               </a>
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item preview-item">
+              <a asp-controller="Admin" asp-action="ExchangePassword"  class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
                   <div class="preview-icon bg-dark rounded-circle">
                     <i class="mdi mdi-onepassword  text-info"></i>
@@ -72,7 +77,7 @@
             </div>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" asp-controller="Admin" asp-action="Home">
+          <a class="nav-link" asp-controller="Admin" asp-action="Index">
             <span class="menu-icon">
               <i class="mdi mdi-speedometer"></i>
             </span>
@@ -156,7 +161,7 @@
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a class="dropdown-item preview-item" asp-controller="Login" asp-action="Index"> 
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-logout text-danger"></i>

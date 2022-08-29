@@ -22,6 +22,7 @@ public class LoginController : Controller
 
     public IActionResult Index()
     {
+        HttpContext.Session.Clear();
         return View();
 
     }
@@ -41,7 +42,7 @@ public class LoginController : Controller
             TempData["username"] = HttpContext.Session.GetString("username");
             TempData["url"] = HttpContext.Session.GetString("url");
 
-            return RedirectToAction("Home", "Admin");
+            return RedirectToAction("Index", "Admin");
         }
         else
         {

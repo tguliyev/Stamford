@@ -1,6 +1,14 @@
 @{
     Layout = "_Layout";
 }
+<style>
+    #denided{
+        color: red;
+    }
+    #succes{
+        color:green;
+    }
+</style>
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -12,6 +20,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
             </form>
+             <span id="denided">@TempData["Changed"]</span>
+             <span id="succes">@TempData["NoChanged"]</span>
         </div>
     </div>
 </div>
