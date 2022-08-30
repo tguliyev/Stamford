@@ -27,7 +27,7 @@ namespace admin.Controllers
             return View(course);
         }
         [HttpPost]
-        public Task<IActionResult> AddCourse(Course course, IFormFile userfile)
+        public async Task<IActionResult> AddCourse(Course course, IFormFile userfile)
         {
             var value = ModelState.Values.ToList();
             bool isValid = false;

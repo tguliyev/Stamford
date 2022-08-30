@@ -24,7 +24,7 @@ namespace admin.Controllers
             return View(admin);
         }
         [HttpPost]
-        public Task<IActionResult> ExhangeProfile(Admin admin, IFormFile userfile)
+        public async Task<IActionResult> ExhangeProfile(Admin admin, IFormFile userfile)
         {
 
             string? username = HttpContext.Session.GetString("username");

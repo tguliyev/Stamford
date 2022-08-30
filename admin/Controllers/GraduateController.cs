@@ -24,7 +24,7 @@ namespace admin.Controllers
 
         //AddGraduate
         [HttpPost]
-        public Task<IActionResult> AddGraduate(Graduate graduate, IFormFile userfile, string course)
+        public async Task<IActionResult> AddGraduate(Graduate graduate, IFormFile userfile, string course)
         {
             var value = ModelState.Values.ToList();
             bool isValid = false;
