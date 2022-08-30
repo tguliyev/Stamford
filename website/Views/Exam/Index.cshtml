@@ -1,8 +1,36 @@
+@model bool
 @{
-    ViewData["title"] = "Exam";
+  ViewData["title"] = "Exam";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Exam results</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="contact-section section_padding">
+  <div class="container">
+    <div class="row">
+
+      <form class="form-contact contact_form" asp-controller="Exam" asp-action="Result" method="post">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Enter your code to reveal exam grade</h4>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <input class="form-control" name="studentCode" id="studentCode" type="text" placeholder='Enter Code'>
+              @{
+                if (Model)
+                {
+                  <div class="mt-2 text-danger">
+                    Telebenin codu duzgun deil
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <button type="submit" class="button button-contactForm">Submit</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>

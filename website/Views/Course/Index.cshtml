@@ -1,0 +1,85 @@
+@model List<Course>
+@{
+    ViewData["title"] = "Course";
+
+    int ROW = (int)ViewData["ROW"];
+    int COL = (int)ViewData["COL"];
+    int pageNum = (int)ViewData["pageNum"];
+    int pageCount = (int)ViewData["pageCount"];
+}
+
+
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner text-center">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Our Courses</h2>
+                        <p>Home<span>/</span>Courses</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="special_cource padding_top">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5">
+                <div class="section_tittle text-center">
+                    <h2>Our Courses</h2>
+                </div>
+            </div>
+        </div>
+        @{
+
+            for (int i = 0; i < ROW; i++)
+            {
+                int colNum = Model.Count - (COL * (i + 1)) >= 0 ? COL : Model.Count - (COL * (i + 1)) + COL;
+                if (colNum < 0) break;
+
+                <div class="row mb-5">
+                    @{
+                        for (int j = 0; j < colNum; j++)
+                        {
+                            int index = (COL * i) + j;
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="single_special_cource">
+                                    <img src="@Model[index].Image.Url" class="special_img" alt="">
+                                    <div class="special_cource_text">
+                                        <a asp-controller="Course" asp-action="Course" asp-route-courseId="@Model[index].Id" class="btn_4">@Model[index].Name</a>
+                                        <h4>$@Model[index].Price</h4>
+
+                                        <h3>@Model[index].Name</h3>
+                                        <p>@Model[index].Desc</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        }
+
+        <nav class="blog-pagination justify-content-center d-flex mb-5">
+            <ul class="pagination">
+                <li class="page-item @(pageNum == 0 ? "disabled" : "")">
+                    <a asp-controller="Course" asp-action="Index" asp-route-pageNum="@(pageNum - 1)"
+                        class="disabled page-link" aria-label="Previous">
+                        <i class="ti-angle-left"></i>
+                    </a>
+                </li>
+                <li class="page-item @(pageNum == pageCount - 1 ? "disabled" : "")">
+                    <a asp-controller="Course" asp-action="Index" asp-route-pageNum="@(pageNum + 1)" class="page-link"
+                        aria-label="Next">
+                        <i class="ti-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>

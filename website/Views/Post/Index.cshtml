@@ -1,0 +1,84 @@
+@{
+    ViewData["title"] = "Home Page";
+    StamfordDBContext? context = ViewData["context"] as StamfordDBContext;
+    if (context == null) throw new ArgumentNullException("Context is null");
+
+    int postId = (int)ViewData["postid"];
+    Post post = context.Posts
+        .Include(post => post.PostAssets)
+        .ThenInclude(postAsset => postAsset.Image)
+        .First(post => post.Id == postId);
+}
+
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner text-center">
+                    <div class="breadcrumb_iner_item">
+                        <h2>Blog Single</h2>
+                        <p>Home<span>-</span>Blog Single</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog_area single-post-area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 posts-list">
+                <div class="single-post">
+                    <div class="feature-img">
+                        @{
+
+                            <div id="post@(post.Id)" class="carousel slide img-fluid" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    @{
+                                        foreach (PostAsset asset in post.PostAssets)
+                                        {
+                                            <div class="carousel-item @(post.PostAssets.First().Id == asset.Id ? "active" : "" )">
+
+                                                @{
+                                                    if (System.IO.Path.GetExtension(asset.Image.Url) == "mp4")
+                                                    {
+                                                        <video src="@asset.Image.Url" class="d-block w-100" controls></video>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@asset.Image.Url" class="d-block w-100" alt="...">
+                                                    }
+                                                }
+
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                @{
+                                    if (post.PostAssets.Count() > 1)
+                                    {
+                                        <a class="carousel-control-prev" href="#post@(post.Id)" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#post@(post.Id)" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        }
+                        @* <img class="img-fluid" src="img/blog/single_blog_1.png" alt=""> *@
+                    </div>
+                    <div class="blog_details">
+                        <h2>@post.Title</h2>
+                        <p class="excert">@post.Content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
