@@ -16,10 +16,7 @@ namespace Stamford.Models
 
         [Required(ErrorMessage = "Postun Açıqlaması Boş olmamalıdır")]
         public string Content { get; set; } = null!;
-<<<<<<< HEAD
 
-=======
->>>>>>> b45096743a5e846f90a139636fd2ebf8aaf237d5
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<PostAsset> PostAssets { get; set; }

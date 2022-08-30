@@ -119,10 +119,7 @@ namespace Stamford.Models
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Graduates)
                     .HasForeignKey(d => d.CourseId)
-<<<<<<< HEAD
-=======
                     .OnDelete(DeleteBehavior.ClientSetNull)
->>>>>>> b45096743a5e846f90a139636fd2ebf8aaf237d5
                     .HasConstraintName("FK__Graduates__cours__367C1819");
 
                 entity.HasOne(d => d.Image)
