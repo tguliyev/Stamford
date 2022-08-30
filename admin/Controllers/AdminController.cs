@@ -65,7 +65,7 @@ namespace admin.Controllers
                 Image image = new Image();
                 var url = await image.UploadImage(userfile);
                 Asset asset = new Asset();
-                asset.Url = url.Result;
+                asset.Url = url;
                 image.UploadImagetoDatabase(asset, _context);
                 currentadmin.Imageid = asset.Id;
                 currentadmin.Email = admin.Email;

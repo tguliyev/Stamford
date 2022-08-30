@@ -50,7 +50,7 @@ namespace admin.Controllers
 
                 var url = await image.UploadImage(userfile);
                 Asset asset = new Asset();
-                asset.Url = url.Result;
+                asset.Url = url;
                 image.UploadImagetoDatabase(asset, _context);
                 graduate.ImageId = asset.Id;
                 graduate.CourseId = courseid;
