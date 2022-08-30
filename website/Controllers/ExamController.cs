@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stamford.Models;
 
 namespace Stamford.Controllers;
@@ -18,8 +19,8 @@ public class ExamController : Controller
     }
 
     [HttpPost]
-    public IActionResult Result(string studentCode) {
-        ExamStudent? examStudent = _context.ExamStudents.FirstOrDefault(es => es.Code == studentCode);
+    public async Task<IActionResult> Result(string studentCode) {
+        ExamStudent? examStudent = await _context.ExamStudents.FirstOrDefaultAsync(es => es.Code == studentCode);
         return examStudent == null ? View("Index", true) : View(examStudent);
     }
 

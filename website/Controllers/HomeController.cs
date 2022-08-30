@@ -17,19 +17,19 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index(int pageNum = 0)
+    public async Task<IActionResult> Index(int pageNum = 0)
     {
         int postCount = _context.Posts.Count();
         int pageCount = (postCount % POST_NUM) > 0 ? (postCount / POST_NUM) + 1 : postCount / POST_NUM;
         pageNum = pageNum < 0 || pageNum > pageCount ? 0 : pageNum;
 
-        List<Post> posts = _context.Posts
+        List<Post> posts = await _context.Posts
             .OrderByDescending(p => p.Id)
             .Include(post => post.PostAssets)
             .ThenInclude(postAsset => postAsset.Image)
             .Skip(pageNum * POST_NUM)
             .Take(POST_NUM)
-            .ToList();
+            .ToListAsync();
 
         ViewData["pageCount"] = pageCount;
         ViewData["pageNum"] = pageNum;

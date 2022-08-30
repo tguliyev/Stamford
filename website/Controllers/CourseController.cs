@@ -12,17 +12,18 @@ public class CourseController : Controller {
         _context = context;
     }
 
-    public IActionResult Index(int pageNum = 0) {
+    public async Task<IActionResult> Index(int pageNum = 0) {
 
         int postCount = _context.Courses.Count();
         int pageCount = (postCount % (ROW * COL)) > 0 ? (postCount / (ROW * COL)) + 1 : postCount / (ROW * COL);
         pageNum = pageNum < 0 || pageNum > pageCount ? 0 : pageNum;
 
-        List<Course> courses = _context.Courses
+        List<Course> courses = await _context.Courses
+            .OrderByDescending(course => course.Id)
             .Include(course => course.Image)
             .Skip(pageNum * ROW * COL)
             .Take(ROW * COL)
-            .ToList();
+            .ToListAsync();
 
         ViewData["ROW"] = ROW;
         ViewData["COL"] = COL;
