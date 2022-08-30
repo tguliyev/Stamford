@@ -27,7 +27,7 @@ namespace admin.Controllers
             return View(course);
         }
         [HttpPost]
-        public IActionResult AddCourse(Course course, IFormFile userfile)
+        public Task<IActionResult> AddCourse(Course course, IFormFile userfile)
         {
             var value = ModelState.Values.ToList();
             bool isValid = false;
@@ -47,7 +47,7 @@ namespace admin.Controllers
             if (isValid)
             {
                 Image image = new Image();
-                var url = image.UploadImage(userfile);
+                var url = await image.UploadImage(userfile);
                 Asset asset = new Asset();
                 asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset,_context);

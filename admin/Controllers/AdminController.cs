@@ -24,7 +24,7 @@ namespace admin.Controllers
             return View(admin);
         }
         [HttpPost]
-        public IActionResult ExhangeProfile(Admin admin, IFormFile userfile)
+        public Task<IActionResult> ExhangeProfile(Admin admin, IFormFile userfile)
         {
 
             string? username = HttpContext.Session.GetString("username");
@@ -63,7 +63,7 @@ namespace admin.Controllers
             else if (state == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid && isValid)
             {
                 Image image = new Image();
-                var url = image.UploadImage(userfile);
+                var url = await image.UploadImage(userfile);
                 Asset asset = new Asset();
                 asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset, _context);

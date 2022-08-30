@@ -24,7 +24,7 @@ namespace admin.Controllers
 
         //AddGraduate
         [HttpPost]
-        public IActionResult AddGraduate(Graduate graduate, IFormFile userfile, string course)
+        public Task<IActionResult> AddGraduate(Graduate graduate, IFormFile userfile, string course)
         {
             var value = ModelState.Values.ToList();
             bool isValid = false;
@@ -48,7 +48,7 @@ namespace admin.Controllers
 
                 Image image = new Image();
 
-                var url = image.UploadImage(userfile);
+                var url = await image.UploadImage(userfile);
                 Asset asset = new Asset();
                 asset.Url = url.Result;
                 image.UploadImagetoDatabase(asset, _context);
