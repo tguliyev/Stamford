@@ -39,9 +39,6 @@ public class LoginController : Controller
             HttpContext.Session.SetString("username",admin.Username);
             HttpContext.Session.SetString("gmail",admin.Email);
             HttpContext.Session.SetString("url",url);
-            TempData["username"] = HttpContext.Session.GetString("username");
-            TempData["url"] = HttpContext.Session.GetString("url");
-
             return RedirectToAction("Index", "Admin");
         }
         else

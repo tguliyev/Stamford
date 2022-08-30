@@ -16,13 +16,11 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            TempData["username"] = HttpContext.Session.GetString("username");
-            TempData["url"] = HttpContext.Session.GetString("url");
             var tupple = new Post();
             return View(tupple);
         }
         [HttpPost]
-        public IActionResult AddPost(Post post, List<IFormFile> userfile)
+        public async Task<IActionResult> AddPost(Post post, List<IFormFile> userfile)
         {
             Image image = new Image();
             if (ModelState.IsValid && userfile != null)
@@ -32,9 +30,9 @@ namespace admin.Controllers
                 _context.SaveChanges();
                 foreach (var formFile in userfile)
                 {
-                    var url = image.UploadImage(formFile);
+                    var url = await image.UploadImage(formFile);
                     Asset asset = new Asset();
-                    asset.Url = url.Result;
+                    asset.Url = url;
                     image.UploadImagetoDatabase(asset, _context);
                     PostAsset postAsset = new PostAsset();
                     postAsset.Imageid = asset.Id;

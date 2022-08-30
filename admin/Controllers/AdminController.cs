@@ -20,13 +20,7 @@ namespace admin.Controllers
 
         public IActionResult Index()
         {
-            
-            TempData["username"] = HttpContext.Session.GetString("username");
-            TempData["url"] = HttpContext.Session.GetString("url");
             Admin admin = new();
-            // var isSession = Session.CheckSession(HttpContext);
-            // if(!isSession)return RedirectToAction("Index","Login");
-            //else 
             return View(admin);
         }
         [HttpPost]
@@ -64,7 +58,6 @@ namespace admin.Controllers
                 currentadmin.Username = admin.Username;
                 _context.SaveChanges();
                 HttpContext.Session.SetString("username", admin.Username);
-                TempData["username"] = HttpContext.Session.GetString("username");
                 TempData["success"] = "Dəyişəkliklər əlavə olundu";
             }
             else if (state == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid && isValid)
@@ -89,7 +82,7 @@ namespace admin.Controllers
                  TempData["validation"]= ModelState.Values.FirstOrDefault(x=>x.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid).Errors[0].ErrorMessage;
             }
 
-            return RedirectToAction("Home", "Admin");
+            return RedirectToAction("Index", "Admin");
         }
 
         public IActionResult ExchangePassword()
