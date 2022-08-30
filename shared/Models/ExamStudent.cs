@@ -6,8 +6,9 @@ namespace Stamford.Models
     public partial class ExamStudent
     {
         public int Id { get; set; }
-        public int Studentid { get; set; }
-        public int Examid { get; set; }
+        public string StudentName { get; set; } = null!;
+        public string ExamName { get; set; } = null!;
         public byte Mark { get; set; }
+        public string Code { get; set; } = null!;
     }
 }

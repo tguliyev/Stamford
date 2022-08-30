@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1703.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stamford", "Stamford.csproj", "{E84E70F5-4460-464D-A418-5A0294024C38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shared", "..\shared\shared.csproj", "{4E52A1FF-78C6-45C8-9C5F-DBDEE0878739}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E84E70F5-4460-464D-A418-5A0294024C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E84E70F5-4460-464D-A418-5A0294024C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E84E70F5-4460-464D-A418-5A0294024C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E52A1FF-78C6-45C8-9C5F-DBDEE0878739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E52A1FF-78C6-45C8-9C5F-DBDEE0878739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E52A1FF-78C6-45C8-9C5F-DBDEE0878739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E52A1FF-78C6-45C8-9C5F-DBDEE0878739}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
