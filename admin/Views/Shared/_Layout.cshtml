@@ -3,7 +3,9 @@
   @* Admin? admin = JsonConvert.DeserializeObject<Admin>(adminjson); *@
   string? username = HttpContextAccessor.HttpContext.Session.GetString("username");
   string? url = HttpContextAccessor.HttpContext.Session.GetString("url");
-  string? path = "../assets/img/" + url;
+  string dirname = Directory.GetCurrentDirectory();
+  var newdir = dirname.Replace("admin","assets\\img\\");
+  string? path = newdir + url;
   System.Console.WriteLine(HttpContextAccessor.HttpContext.Response.Headers);
   if (HttpContextAccessor.HttpContext.Session.Keys.Count() < 1)
   {
@@ -43,7 +45,7 @@
           <div class="profile-desc">
             <div class="profile-pic">
               <div class="count-indicator">
-                <img class="img-xs rounded-circle " src="~/@path" />
+                <img class="img-xs rounded-circle " src="@path" />
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
@@ -132,7 +134,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                 <div class="navbar-profile">
-                  <img class="img-xs rounded-circle " src="~/@path" />
+                  <img class="img-xs rounded-circle " src="@path" />
                   <p class="mb-0 d-none d-sm-block navbar-profile-name">@username</p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
