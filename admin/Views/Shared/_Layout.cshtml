@@ -3,9 +3,7 @@
   @* Admin? admin = JsonConvert.DeserializeObject<Admin>(adminjson); *@
   string? username = HttpContextAccessor.HttpContext.Session.GetString("username");
   string? url = HttpContextAccessor.HttpContext.Session.GetString("url");
-  string dirname = Directory.GetCurrentDirectory();
-  var newdir = dirname.Replace("admin","assets\\img\\");
-  string? path = newdir + url;
+  string? path = "\\img\\" + url;
   System.Console.WriteLine(HttpContextAccessor.HttpContext.Response.Headers);
   if (HttpContextAccessor.HttpContext.Session.Keys.Count() < 1)
   {
@@ -32,6 +30,10 @@
   <link rel="stylesheet" href="~/css/style.css" />
   <link rel="stylesheet" href="~/css/custom.css" />
   <link rel="shortcut icon" href="~/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com"crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Robot+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a04e8328d6.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -81,7 +83,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" asp-controller="Admin" asp-action="Index">
             <span class="menu-icon">
-              <i class="mdi mdi-speedometer"></i>
+              <i class="fa-solid fa-house"></i>
             </span>
             <span class="menu-title">Ana Səhifə</span>
           </a>
@@ -90,7 +92,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" asp-controller="Exam" asp-action="Index">
             <span class="menu-icon">
-              <i class="mdi mdi-table-large"></i>
+              <i class="fa-solid fa-book"></i>
             </span>
             <span class="menu-title">İmtahan nəticələri</span>
           </a>
@@ -98,7 +100,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" asp-controller="Course" asp-action="Index">
             <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
+              <i class="fa-solid fa-book-open-reader"></i>
             </span>
             <span class="menu-title">Dərsler</span>
           </a>
@@ -106,7 +108,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" asp-controller="Graduate" asp-action="Index">
             <span class="menu-icon">
-              <i class="mdi mdi-contacts"></i>
+              <i class="fa-solid fa-graduation-cap"></i>
             </span>
             <span class="menu-title">Naliyyətlər Bölməsi</span>
           </a>
@@ -114,7 +116,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" asp-controller="Post" asp-action="Index">
             <span class="menu-icon">
-              <i class="mdi mdi-playlist-play"></i>
+              <i class="fa-solid fa-share-nodes"></i>
             </span>
             <span class="menu-title">Post Paylaşma</span>
           </a>
@@ -128,7 +130,7 @@
         </div>
         <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
+            <i class="fa-solid fa-bars"></i>
           </button>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">

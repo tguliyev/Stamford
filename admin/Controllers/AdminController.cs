@@ -63,7 +63,7 @@ namespace admin.Controllers
             else if (state == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid && isValid)
             {
                 Image image = new Image();
-                var url = await image.UploadImage(userfile);
+                var url = await image.UploadProfileImage(userfile);
                 Asset asset = new Asset();
                 asset.Url = url;
                 image.UploadImagetoDatabase(asset, _context);
