@@ -19,7 +19,10 @@ namespace admin.Models
                 var imgname = guid.Split('-')[0];
                 var filesplit = filename.Split('.')[1];
                 filename = imgname+'.'+filesplit;
-                string uploadfilepath = Path.Combine(Directory.GetCurrentDirectory(), "..\\assets\\images", filename);
+
+                string dirname = Directory.GetCurrentDirectory();
+                var newdir = dirname.Replace("admin","assets\\img");
+                string uploadfilepath = Path.Combine(newdir, filename);
                 using (var stream = new FileStream(uploadfilepath, FileMode.OpenOrCreate))
                 {
                     await userfile.CopyToAsync(stream);
